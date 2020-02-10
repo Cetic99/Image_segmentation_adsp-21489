@@ -43,7 +43,7 @@
 #define CONVOLUTION_NO_OPT
 #define NORMALIZATION_NO_OPT
 #define EDGE_NO_OPT
-#define LABELING_V2
+#define LABELING_V1
 #define COLOR_IMAGE_NO_OPT
 
 
@@ -622,13 +622,8 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
 
-	byte *edged_pixels_arr = (byte *) heap_malloc(0, width * height);
-	if (edged_pixels_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
 	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = edged_pixels_arr;         // assigning array to output pointer
+	*out_pixels = pixels;         // assigning array to output pointer
 
 	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
 			width * height * sizeof(uint32));
@@ -654,10 +649,9 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	// printf("Done with convolution!\n");
 	min_max_normalization(edged_pixels_arr_uint32, width, height);
 	for (i = 0; i < height * width; i++) {
-		edged_pixels_arr[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
+		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
 		// printf("%d",edged_pixels_arr[i]);
 	}
-	heap_free(0,pixels);
 	heap_free(0,edged_pixels_arr_uint32);
 }
 #endif
