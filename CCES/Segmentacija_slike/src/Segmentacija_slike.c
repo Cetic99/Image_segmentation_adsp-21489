@@ -28,14 +28,35 @@
 
 
 //-----------------------COMPILING------------------------
-#define KNOWN_IMAGE_SIZE_READ 				//READ1
-#define GRAY_1
-#define CONVOLUTION_2						//CONVOLUTION_1
-#define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		//EDGE_1,KNOWN_IMAGE_SIZE_EDGE_1
-#define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	//LABELING_1,KNOWN_IMAGE_SIZE_LABELING_1
-#define KNOWN_IMAGE_SIZE_NORMALIZATION_1	//NORMALIZATION_1
+
+//#define READ_1				//READ1
+//#define GRAY_1
+//#define CONVOLUTION_2						//CONVOLUTION_1
+//#define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		//EDGE_1,KNOWN_IMAGE_SIZE_EDGE_1
+//#define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	//LABELING_1,KNOWN_IMAGE_SIZE_LABELING_1
+//#define KNOWN_IMAGE_SIZE_NORMALIZATION_1	//NORMALIZATION_1
+//#define WRITE_1
+//#define COLOR_IMAGE_1
+#define READ_1
 #define WRITE_1
-#define COLOR_IMAGE_1
+#define GRAY_1
+#define CONVOLUTION_NO_OPT
+#define NORMALIZATION_NO_OPT
+#define EDGE_NO_OPT
+#define LABELING_V2
+#define COLOR_IMAGE_NO_OPT
+
+
+
+
+//  #define KNOWN_IMAGE_SIZE_READ 				//READ1
+//  #define GRAY_1
+//  #define CONVOLUTION_NO_OPT						//CONVOLUTION_1
+//  #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		//EDGE_1,KNOWN_IMAGE_SIZE_EDGE_1
+//  #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	//LABELING_1,KNOWN_IMAGE_SIZE_LABELING_1
+//  #define KNOWN_IMAGE_SIZE_NORMALIZATION	//NORMALIZATION_1
+//  #define WRITE_1
+//  #define COLOR_IMAGE_1
 //========================================================
 
 //--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------
@@ -57,6 +78,7 @@ uint32 uid = 999;
 #pragma section("pixels_3b")
 static byte pixels_3b[45001];
 int index_pixels_3b;
+
 //========================================================
 
 
@@ -83,6 +105,7 @@ RGB colormap[SIZE] = { 0 };
 
 void create_colormap(void) {
 	srand(time(0));
+#pragma SIMD_for
 	for (int i = 1; i < SIZE; i++) {
 		colormap[i].r = rand();
 		colormap[i].g = rand();
@@ -476,8 +499,8 @@ void to_gray(void) {
 }
 #endif
 
-#ifdef CONVOLUTION_1
-static inline uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, uint32 column, uint32 width)
+#ifdef CONVOLUTION_NO_OPT
+static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row, uint32 column, uint32 width)
 {
 	byte(*pix_mat)[width] = (byte(*)[width])pixels;
 	uint32 i, j, sum = 0;
@@ -492,7 +515,23 @@ static inline uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, 
 }
 #endif
 
-#ifdef CONVOLUTION_2
+#ifdef CONVOLUTION_PRAGMA
+static inline uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, uint32 column, uint32 width)
+{
+	byte(*pix_mat)[width] = (byte(*)[width])pixels;
+	uint32 i, j, sum = 0;
+	#pragma vector_for
+	for (i = 0; i < 3; i++)
+	{
+		sum += kernel[i][0] * pix_mat[i + row - 1][column - 1];
+		sum += kernel[i][1] * pix_mat[i + row - 1][1 + column - 1];
+		sum += kernel[i][2] * pix_mat[i + row - 1][2 + column - 1];
+	}
+	return sum;
+}
+#endif
+
+#ifdef CONVOLUTION_UNROLL
 static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row,
 		uint32 column, uint32 width) {
 	byte (*pix_mat)[width] = (byte (*)[width]) pixels;
@@ -512,7 +551,7 @@ static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row,
 }
 #endif
 
-#ifdef NORMALIZATION_1
+#ifdef NORMALIZATION_NO_OPT
 void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 	uint32 min = INT_MAX, max = 0, i;
 	uint32 length = height * width;
@@ -533,7 +572,29 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 }
 #endif
 
-#ifdef KNOWN_IMAGE_SIZE_NORMALIZATION_1
+#ifdef NORMALIZATION_PRAGMA
+void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
+	uint32 min = INT_MAX, max = 0, i;
+	uint32 length = height * width;
+	for (i = 0; i < length; i++) {
+		if (pixels[i] < min) {
+			min = pixels[i];
+		}
+		if (pixels[i] > max) {
+			max = pixels[i];
+		}
+	}
+	double sub = max - min;
+	double ratio;
+	#pragma vector_for
+	for (i = 0; i < length; i++) {
+		ratio = (double) (pixels[i] - min) / sub;
+		pixels[i] = ratio * 255;
+	}
+}
+#endif
+
+#ifdef KNOWN_IMAGE_SIZE_NORMALIZATION
 void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 	uint32 min = INT_MAX, max = 0, i;
 	uint32 length = H * W;
@@ -547,7 +608,7 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 	}
 	double sub = max - min;
 	double ratio;
-#pragma vector_for(4)
+#pragma vector_for
 	for (i = 0; i < length; i++) {
 		ratio = (double) (pixels[i] - min) / sub;
 		pixels[i] = ratio * 255;
@@ -556,12 +617,18 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 #endif
 
 
-#ifdef EDGE_1
+#ifdef EDGE_NO_OPT
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
+
+	byte *edged_pixels_arr = (byte *) heap_malloc(0, width * height);
+	if (edged_pixels_arr == NULL) {
+		printf("Nije instancirana memorija\n");
+		return;
+	}
 	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = pixels;         // assigning array to output pointer
+	*out_pixels = edged_pixels_arr;         // assigning array to output pointer
 
 	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
 			width * height * sizeof(uint32));
@@ -576,8 +643,8 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
 	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
 
-	for (i = 1; i < height - 2; i++) {
-		for (j = 1; j < width - 2; j++) {
+	for (i = 1; i < height - 1; i++) {
+		for (j = 1; j < width - 1; j++) {
 			gx = convolution(pixels, mx, i, j, width);
 			gy = convolution(pixels, my, i, j, width);
 			edged_pixels_mat_uint32[i][j] = sqrt(gx * gx + gy * gy);
@@ -587,47 +654,10 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	// printf("Done with convolution!\n");
 	min_max_normalization(edged_pixels_arr_uint32, width, height);
 	for (i = 0; i < height * width; i++) {
-		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
+		edged_pixels_arr[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
 		// printf("%d",edged_pixels_arr[i]);
 	}
-	heap_free(0,edged_pixels_arr_uint32);
-}
-#endif
-
-#ifdef KNOWN_IMAGE_SIZE_EDGE_1
-void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
-		uint32 height) {
-	uint32 i, j, gx, gy;
-	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = pixels;         // assigning array to output pointer
-
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
-			W * H * sizeof(uint32));
-	if (edged_pixels_arr_uint32 == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	//uint32 *edged_pixels_arr_uint32 = (uint32 *)malloc(width * height * sizeof(uint32));    // creating array of uint32
-	uint32 (*edged_pixels_mat_uint32)[W] =
-			(uint32 (*)[W]) edged_pixels_arr_uint32; // converting array to matrix
-
-	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
-	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
-
-	for (i = 1; i < H - 1; i++) {
-		for (j = 1; j < W - 1; j++) {
-			gx = convolution(pixels, mx, i, j, width);
-			gy = convolution(pixels, my, i, j, width);
-			edged_pixels_mat_uint32[i][j] = sqrt(gx * gx + gy * gy);
-		}
-		// printf("Convolved!\n");
-	}
-	// printf("Done with convolution!\n");
-	min_max_normalization(edged_pixels_arr_uint32, W, H);
-	for (i = 0; i < H * W; i++) {
-		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
-		// printf("%d",edged_pixels_arr[i]);
-	}
+	heap_free(0,pixels);
 	heap_free(0,edged_pixels_arr_uint32);
 }
 #endif
@@ -666,14 +696,14 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 }
 #endif
 
-#ifdef LABELING_1
+#ifdef LABELING_V1
 void labeling(byte * edge_im, uint32 w,uint32 h)
 
 {
 	// binary conversion
 	for(int i =0; i<w*h;i++)
 	{
-		if(edge_im[i] > 7)
+		if(edge_im[i] > 10)
 		edge_im[i] = 0;
 		else
 		edge_im[i] = 1;
@@ -684,14 +714,22 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 	 WAITING FOR NEXT ITERATION!!!!!!!
 	 */
 	byte (*edge_mat)[w] = (byte(*)[w])edge_im;
-	uint32 *parent = malloc(w*h*4);
+	uint32 *parent = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
+	if (parent == NULL) {
+		printf("Nije instancirana memorija\n");
+		return;
+	}
 	for(int i = 0;i<w*h;i++)                // Everyone is it's own parent
 	{
 		parent[i] = i;
 	}
 	uint32 label_counter = 1;
 	uint32 min_neighbour;
-	uint32 *mat_arr = malloc(w*h*4);
+	uint32 *mat_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
+	if (mat_arr == NULL) {
+		printf("Nije instancirana memorija\n");
+		return;
+	}
 	for( int i = 0; i< w*h; i++) {
 		mat_arr[i] = edge_im[i];
 	}
@@ -759,20 +797,18 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 	for(i = 0; i<w*h; i++) {
 		edge_im[i] = mat_arr[i];
 	}
+	heap_free(0,parent);
+	heap_free(0,mat_arr);
 
 }
 #endif
 
-#ifdef LABELING_2
+#ifdef LABELING_V2
 void labeling(byte * edge_im, uint32 w, uint32 h)
 
 {
-	/*
-	 Maybe it is better to make new matrix with values of edges UINT_MAX
-	 With this it will be possible to remove EDGE_VAL in if statement
-	 WAITING FOR NEXT ITERATION!!!!!!!
-	 */
 	// binary conversion
+#pragma SIMD_for
 	for (int i = 0; i < w * h; i++) {
 		if (edge_im[i] > 10)
 			edge_im[i] = 0;
@@ -786,7 +822,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 		printf("Nije instancirana memorija\n");
 		return;
 	}
-	//uint32 *parent = malloc(w*h*4);
+#pragma vector_for
 	for (int i = 0; i < w*h; i++)          // Everyone is it's own parent
 	{
 		parent_arr[i] = i;
@@ -798,6 +834,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 		printf("Nije instancirana memorija\n");
 		return;
 	}
+#pragma vector_for(4)
 	for (int i = 0; i < w * h; i++) {
 		mat_arr[i] = edge_im[i];
 	}
@@ -836,6 +873,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 	int i = 0;
 	int j = 0;
+#pragma SIMD_for
 	for (i = w*h; i >= label_counter; i--) {
 		j = i;
 		while (parent_arr[j] != j) {
@@ -843,10 +881,12 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 		}
 		parent_arr[i] = j;
 	}
+#pragma vector_for
 	for (i = 0; i < h * w; i++) {
 		mat_arr[i] = parent_arr[mat_arr[i]];
 	}
 	min_max_normalization(mat_arr, w, h);
+#pragma SIMD_for
 	for (i = 0; i < w * h; i++) {
 		edge_im[i] = mat_arr[i];
 	}
@@ -947,7 +987,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 
 {
 	// binary conversion
-#pragma vector_for(4)
+#pragma SIMD_for
 	for (int i = 0; i < W * H; i++) {
 		if (edge_im[i] > 10)
 			edge_im[i] = 0;
@@ -961,7 +1001,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 		printf("Nije instancirana memorija\n");
 		return;
 	}
-//#pragma SIMD_for
+#pragma vector_for
 	for (int i = 0; i < W*H; i++)          // Everyone is it's own parent
 	{
 		parent_arr[i] = i;
@@ -1021,7 +1061,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 		}
 		parent_arr[i] = j;
 	}
-#pragma vector_for(4)
+#pragma vector_for
 	for (i = 0; i < H * W; i++) {
 		mat_arr[i] = parent_arr[mat_arr[i]];
 	}
@@ -1035,7 +1075,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 }
 #endif
 
-#ifdef COLOR_IMAGE_1
+#ifdef COLOR_IMAGE_NO_OPT
 void colorImage(byte * labeled_im, byte* colored_im, uint32 w, uint32 h) {
 	uint32 num_iter = w * h;
 	uint32 counter = 1;
