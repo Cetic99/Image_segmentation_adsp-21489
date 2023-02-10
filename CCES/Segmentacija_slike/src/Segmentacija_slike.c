@@ -57,31 +57,6 @@ uint32 uid = 999;
 #pragma section("pixels_3b")
 static byte pixels_3b[45001];
 int index_pixels_3b;
-
-uint32 uid1 = 888;
-#pragma section("pixels_gray")
-static byte pixels_gray[30000];
-int index_pixels_gray;
-
-uint32 uid2 = 777;
-#pragma section("parent")
-static uint32 parent[50001];
-int index_parent;
-
-uint32 uid3 = 666;
-#pragma section("mat_array")
-static uint32 mat_array[50000];
-int index_mat_array;
-
-uint32 uid4 = 555;
-#pragma section("edged_pixels_array")
-static byte edged_pixels_array[50000];
-int index_edged_pixels_array;
-
-uint32 uid5 = 444;
-#pragma section("edged_pixels_array_uint32")
-static uint32 edged_pixels_array_uint32[50000];
-int index_edged_pixels_array_uint32;
 //========================================================
 
 
@@ -484,12 +459,7 @@ void WriteImage(const char *fileName, byte* pixels, type t) {
 #ifdef GRAY_1
 void to_gray(void) {
 	bytesPerPixel = 1;
-	index_pixels_gray = heap_install(pixels_gray, sizeof(pixels_gray), uid1);
-	if (index_pixels_3b < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	gray_pix_arr = (byte *) heap_malloc(index_pixels_gray, height * width);
+	gray_pix_arr = (byte *) heap_malloc(0, height * width);
 	if (gray_pix_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -560,26 +530,6 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 		ratio = (double) (pixels[i] - min) / sub;
 		pixels[i] = ratio * 255;
 	}
-	// for (i = 0; i < length; i++)
-	// {
-	//         double ratio = (double)(pixels[i] - min) / (max - min);
-	//         pixels[i] = ratio * 255;
-	// }
-	// uint32 trh = (max-min) * 0.05 + min;
-	// for (i = 0; i < length; i++)
-	// {
-
-	//     if (pixels[i] > trh)
-	//     {
-	//         pixels[i] = 255;
-	//     }
-	//     else
-	//     {
-	//         pixels[i] = 0;
-	//     }
-	// }
-
-	// printf("Normalized!\n");
 }
 #endif
 
@@ -610,27 +560,10 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
-	index_edged_pixels_array = heap_install(edged_pixels_array,
-			sizeof(edged_pixels_array), uid4);
-	if (index_edged_pixels_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	byte *edged_pixels_arr = (byte *) heap_malloc(index_parent, width * height);
-	if (edged_pixels_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
 	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = edged_pixels_arr;         // assigning array to output pointer
+	*out_pixels = pixels;         // assigning array to output pointer
 
-	index_edged_pixels_array_uint32 = heap_install(edged_pixels_array_uint32,
-			sizeof(edged_pixels_array_uint32), uid5);
-	if (index_edged_pixels_array_uint32 < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(index_parent,
+	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
 			width * height * sizeof(uint32));
 	if (edged_pixels_arr_uint32 == NULL) {
 		printf("Nije instancirana memorija\n");
@@ -654,9 +587,10 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	// printf("Done with convolution!\n");
 	min_max_normalization(edged_pixels_arr_uint32, width, height);
 	for (i = 0; i < height * width; i++) {
-		edged_pixels_arr[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
+		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
 		// printf("%d",edged_pixels_arr[i]);
 	}
+	heap_free(0,edged_pixels_arr_uint32);
 }
 #endif
 
@@ -664,27 +598,10 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
-	index_edged_pixels_array = heap_install(edged_pixels_array,
-			sizeof(edged_pixels_array), uid4);
-	if (index_edged_pixels_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	byte *edged_pixels_arr = (byte *) heap_malloc(index_parent, W * H);
-	if (edged_pixels_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
 	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = edged_pixels_arr;         // assigning array to output pointer
+	*out_pixels = pixels;         // assigning array to output pointer
 
-	index_edged_pixels_array_uint32 = heap_install(edged_pixels_array_uint32,
-			sizeof(edged_pixels_array_uint32), uid5);
-	if (index_edged_pixels_array_uint32 < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(index_parent,
+	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
 			W * H * sizeof(uint32));
 	if (edged_pixels_arr_uint32 == NULL) {
 		printf("Nije instancirana memorija\n");
@@ -697,8 +614,8 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
 	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
 
-	for (i = 1; i < H - 2; i++) {
-		for (j = 1; j < W - 2; j++) {
+	for (i = 1; i < H - 1; i++) {
+		for (j = 1; j < W - 1; j++) {
 			gx = convolution(pixels, mx, i, j, width);
 			gy = convolution(pixels, my, i, j, width);
 			edged_pixels_mat_uint32[i][j] = sqrt(gx * gx + gy * gy);
@@ -708,9 +625,10 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	// printf("Done with convolution!\n");
 	min_max_normalization(edged_pixels_arr_uint32, W, H);
 	for (i = 0; i < H * W; i++) {
-		edged_pixels_arr[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
+		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
 		// printf("%d",edged_pixels_arr[i]);
 	}
+	heap_free(0,edged_pixels_arr_uint32);
 }
 #endif
 
@@ -718,41 +636,20 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
-	index_edged_pixels_array = heap_install(edged_pixels_array,
-			sizeof(edged_pixels_array), uid4);
-	if (index_edged_pixels_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	byte *edged_pixels_arr = (byte *) heap_malloc(index_parent, W * H);
-	if (edged_pixels_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = edged_pixels_arr;         // assigning array to output pointer
+	*out_pixels = pixels;         // assigning array to output pointer
 
-	index_edged_pixels_array_uint32 = heap_install(edged_pixels_array_uint32,
-			sizeof(edged_pixels_array_uint32), uid5);
-	if (index_edged_pixels_array_uint32 < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(index_parent,
-			W * H * sizeof(uint32));
+	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
 	if (edged_pixels_arr_uint32 == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
 	}
-	//uint32 *edged_pixels_arr_uint32 = (uint32 *)malloc(width * height * sizeof(uint32));    // creating array of uint32
-	uint32 (*edged_pixels_mat_uint32)[W] =
-			(uint32 (*)[W]) edged_pixels_arr_uint32; // converting array to matrix
+	uint32 (*edged_pixels_mat_uint32)[W] = (uint32 (*)[W]) edged_pixels_arr_uint32; // converting array to matrix
 
 	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
 	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
 
-	for (i = 1; i < H - 2; i++) {
-		for (j = 1; j < W - 2; j++) {
+	for (i = 1; i < H - 1; i++) {
+		for (j = 1; j < W - 1; j++) {
 			gx = convolution(pixels, mx, i, j, width);
 			gy = convolution(pixels, my, i, j, width);
 			edged_pixels_mat_uint32[i][j] = gx * gx + gy * gy;//sqrt(gx * gx + gy * gy);
@@ -762,9 +659,10 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 	// printf("Done with convolution!\n");
 	min_max_normalization(edged_pixels_arr_uint32, W, H);
 	for (i = 0; i < H * W; i++) {
-		edged_pixels_arr[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
+		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
 		// printf("%d",edged_pixels_arr[i]);
 	}
+	heap_free(0,edged_pixels_arr_uint32);
 }
 #endif
 
@@ -883,12 +781,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 
 	byte (*edge_mat)[w] = (byte (*)[w]) edge_im;
-	index_parent = heap_install(parent, sizeof(parent), uid2);
-	if (index_parent < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *parent_arr = (uint32 *) heap_malloc(index_parent, w * h * 4);
+	uint32 *parent_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
 	if (parent_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -900,13 +793,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 	uint32 label_counter = w*h;
 	uint32 max_neighbour;
-	//uint32 *mat_arr = malloc(w*h*4);
-	index_mat_array = heap_install(mat_array, sizeof(mat_array), uid3);
-	if (index_mat_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *mat_arr = (uint32 *) heap_malloc(index_mat_array, w * h * 4);
+	uint32 *mat_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
 	if (mat_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -963,8 +850,8 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	for (i = 0; i < w * h; i++) {
 		edge_im[i] = mat_arr[i];
 	}
-	free(parent_arr);
-
+	heap_free(0,parent_arr);
+	heap_free(0,mat_arr);
 }
 #endif
 
@@ -981,12 +868,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 
 	byte (*edge_mat)[W] = (byte (*)[W]) edge_im;
-	index_parent = heap_install(parent, sizeof(parent), uid2);
-	if (index_parent < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *parent_arr = (uint32 *) heap_malloc(index_parent, W * H * 4);
+	uint32 *parent_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
 	if (parent_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -998,13 +880,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 	uint32 label_counter = W*H;
 	uint32 max_neighbour;
-	//uint32 *mat_arr = malloc(w*h*4);
-	index_mat_array = heap_install(mat_array, sizeof(mat_array), uid3);
-	if (index_mat_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *mat_arr = (uint32 *) heap_malloc(index_mat_array, W * H * 4);
+	uint32 *mat_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
 	if (mat_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -1080,17 +956,11 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 
 	byte (*edge_mat)[W] = (byte (*)[W]) edge_im;
-	index_parent = heap_install(parent, sizeof(parent), uid2);
-	if (index_parent < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *parent_arr = (uint32 *) heap_malloc(index_parent, W * H * 4);
+	uint32 *parent_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
 	if (parent_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
 	}
-	//uint32 *parent = malloc(w*h*4);
 //#pragma SIMD_for
 	for (int i = 0; i < W*H; i++)          // Everyone is it's own parent
 	{
@@ -1098,13 +968,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	}
 	uint32 label_counter = W*H;
 	uint32 max_neighbour;
-	//uint32 *mat_arr = malloc(w*h*4);
-	index_mat_array = heap_install(mat_array, sizeof(mat_array), uid3);
-	if (index_mat_array < 0) {
-		printf("Instalacija heap-a nije prosla\n");
-		return;
-	}
-	uint32 *mat_arr = (uint32 *) heap_malloc(index_mat_array, W * H * 4);
+	uint32 *mat_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
 	if (mat_arr == NULL) {
 		printf("Nije instancirana memorija\n");
 		return;
@@ -1166,8 +1030,8 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	for (i = 0; i < W * H; i++) {
 		edge_im[i] = mat_arr[i];
 	}
-	free(parent_arr);
-
+	heap_free(0,parent_arr);
+	heap_free(0,mat_arr);
 }
 #endif
 
@@ -1228,14 +1092,14 @@ int main() {
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za detekciju ivica: ",final_count);
 
-
+	WriteImage("Edged", edged_pix_array, GRAY);
 	//labeling----coding image
 	START_CYCLE_COUNT(start_count);
 	labeling(edged_pix_array, width, height);
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za kodovanje slike: ",final_count);
 
-
+	WriteImage("Coded", edged_pix_array, GRAY);
 	START_CYCLE_COUNT(start_count);
 	create_colormap();
 	STOP_CYCLE_COUNT(final_count,start_count);
@@ -1257,9 +1121,9 @@ int main() {
 	STOP_CYCLE_COUNT(final_count,program_start);
 	PRINT_CYCLES("Broj ciklusa citav program: ",final_count);
 	// freeing memory
-	free(pixels);
-	free(gray_pix_arr);
-	free(edged_pix_array);
+	heap_free(0,pixels);
+	//free(gray_pix_arr);
+	//free(edged_pix_array);
 	return 0;
 }
 
