@@ -44,8 +44,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
 								</option>
 								<option id="compiler.option.compilerswitch.1477684708" name="Compiler Switch" superClass="compiler.option.compilerswitch" useByScannerDiscovery="false" value="false" valueType="boolean"/>
-								<option id="sharc.compiler.option.linearsimd.628966953" name="Allow automatic SIMD code generation in linear code (-linear-simd)" superClass="sharc.compiler.option.linearsimd" value="false" valueType="boolean"/>
-								<option id="sharc.compiler.option.loopsimd.328129561" name="Allow automatic SIMD code generation in loops, aggregate assignments and inlined memcpy operations (-loop-simd)" superClass="sharc.compiler.option.loopsimd" value="false" valueType="boolean"/>
+								<option id="sharc.compiler.option.linearsimd.628966953" name="Allow automatic SIMD code generation in linear code (-linear-simd)" superClass="sharc.compiler.option.linearsimd" value="true" valueType="boolean"/>
+								<option id="sharc.compiler.option.loopsimd.328129561" name="Allow automatic SIMD code generation in loops, aggregate assignments and inlined memcpy operations (-loop-simd)" superClass="sharc.compiler.option.loopsimd" value="true" valueType="boolean"/>
+								<option id="compiler.option.codesize.1983120240" name="Optimize for code size/speed (0 - smallest, 100 - fastest) (-Ov)" superClass="compiler.option.codesize" value="100" valueType="string"/>
+								<option id="compiler.option.compilerprofiling.824816634" superClass="compiler.option.compilerprofiling" value="false" valueType="boolean"/>
 								<inputType id="compiler.inputType.1983004914" name="C/C++ Source" superClass="compiler.inputType"/>
 							</tool>
 							<tool id="sharc.toolchain.linker.167608421" name="CrossCore SHARC Linker" superClass="sharc.toolchain.linker">

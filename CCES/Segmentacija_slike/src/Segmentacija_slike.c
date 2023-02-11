@@ -11,6 +11,11 @@
 #include <limits.h>
 #include <time.h>
 #include <cycle_count.h>
+#include <def21489.h> 
+#include <sru21489.h> 
+#include <SYSREG.h>
+
+
 #define DATA_OFFSET_OFFSET      0x000A
 #define WIDTH_OFFSET            0x0012
 #define HEIGHT_OFFSET           0x0016
@@ -28,15 +33,7 @@
 
 
 //-----------------------COMPILING------------------------
-
-//#define READ_1				//READ1
-//#define GRAY_1
-//#define CONVOLUTION_2						//CONVOLUTION_1
-//#define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		//EDGE_1,KNOWN_IMAGE_SIZE_EDGE_1
-//#define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	//LABELING_1,KNOWN_IMAGE_SIZE_LABELING_1
-//#define KNOWN_IMAGE_SIZE_NORMALIZATION_1	//NORMALIZATION_1
-//#define WRITE_1
-//#define COLOR_IMAGE_1
+//NO OPTIMIZATION
 #define READ_1
 #define WRITE_1
 #define GRAY_1
@@ -47,16 +44,38 @@
 #define COLOR_IMAGE_NO_OPT
 
 
+// //OPTIMIZED LABELING FUNCTION
+// #define READ_1
+// #define WRITE_1
+// #define GRAY_1
+// #define CONVOLUTION_NO_OPT
+// #define NORMALIZATION_PRAGMA
+// #define EDGE_NO_OPT
+// #define LABELING_V2
+// #define COLOR_IMAGE_NO_OPT
+
+// //OPTIMIZED CONVOLUTION FUNCTION
+// #define READ_1
+// #define WRITE_1
+// #define GRAY_1
+// #define CONVOLUTION_UNROLL
+// #define NORMALIZATION_PRAGMA
+// #define EDGE_NO_OPT
+// #define LABELING_V2
+// #define COLOR_IMAGE_NO_OPT
 
 
-//  #define KNOWN_IMAGE_SIZE_READ 				//READ1
-//  #define GRAY_1
-//  #define CONVOLUTION_NO_OPT						//CONVOLUTION_1
-//  #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		//EDGE_1,KNOWN_IMAGE_SIZE_EDGE_1
-//  #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	//LABELING_1,KNOWN_IMAGE_SIZE_LABELING_1
-//  #define KNOWN_IMAGE_SIZE_NORMALIZATION	//NORMALIZATION_1
-//  #define WRITE_1
-//  #define COLOR_IMAGE_1
+//KNOWN IMAGE SIZE
+// #define KNOWN_IMAGE_SIZE_READ 				
+// #define GRAY_1
+// #define CONVOLUTION_UNROLL						
+// #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED		
+// #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED	
+// #define KNOWN_IMAGE_SIZE_NORMALIZATION	
+// #define WRITE_1
+// #define COLOR_IMAGE_NO_OPT
+
+
 //========================================================
 
 //--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------
@@ -697,7 +716,7 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 	// binary conversion
 	for(int i =0; i<w*h;i++)
 	{
-		if(edge_im[i] > 10)
+		if(edge_im[i] > 7)
 		edge_im[i] = 0;
 		else
 		edge_im[i] = 1;
@@ -804,7 +823,7 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 	// binary conversion
 #pragma SIMD_for
 	for (int i = 0; i < w * h; i++) {
-		if (edge_im[i] > 10)
+		if (edge_im[i] > 7)
 			edge_im[i] = 0;
 		else
 			edge_im[i] = 1;
@@ -1083,6 +1102,28 @@ void colorImage(byte * labeled_im, byte* colored_im, uint32 w, uint32 h) {
 	}
 }
 #endif
+
+
+void InitSRU(void){	//** LED01**//
+		SRU(HIGH,DPI_PBEN06_I);	
+		SRU(FLAG4_O,DPI_PB06_I);	//** LED02**//	
+		SRU(HIGH,DPI_PBEN13_I);	
+		SRU(FLAG5_O,DPI_PB13_I);	//** LED03**//	
+		SRU(HIGH,DPI_PBEN14_I);	
+		SRU(FLAG6_O,DPI_PB14_I);	//** LED04**//	
+		SRU(HIGH,DAI_PBEN03_I);
+		SRU(HIGH,DAI_PB03_I);	//** LED05**//	
+		SRU(HIGH,DAI_PBEN04_I);	
+		SRU(HIGH,DAI_PB04_I);	//** LED06**//	
+		SRU(HIGH,DAI_PBEN15_I);	
+		SRU(HIGH,DAI_PB15_I);	//** LED07**//	
+		SRU(HIGH,DAI_PBEN16_I);	
+		SRU(HIGH,DAI_PB16_I);	//** LED08**//	
+		SRU(HIGH,DAI_PBEN17_I);	
+		SRU(HIGH,DAI_PB17_I);	//Setting flag pins as outputs
+		sysreg_bit_set(sysreg_FLAGS, (FLG4O|FLG5O|FLG6O) );	//Setting HIGH to flag pins	
+		sysreg_bit_set(sysreg_FLAGS, (FLG4|FLG5|FLG6) );
+	}
 /**
  * If you want to use command program arguments, then place them in the following string.
  */
@@ -1100,27 +1141,40 @@ int main() {
 	 */
 	adi_initComponents();
 
+	InitSRU();	//turn off LEDs	
+	sysreg_bit_clr(sysreg_FLAGS, FLG4);	
+	sysreg_bit_clr(sysreg_FLAGS, FLG5);	
+	sysreg_bit_clr(sysreg_FLAGS, FLG6);	
+	SRU(LOW,DAI_PB03_I);	
+	SRU(LOW,DAI_PB04_I);	
+	SRU(LOW,DAI_PB15_I);	
+	SRU(LOW,DAI_PB16_I);	
+	SRU(LOW,DAI_PB17_I);
+
 
 	// reading Image into pixels
+	sysreg_bit_set(sysreg_FLAGS, FLG4);	
 	START_CYCLE_COUNT(program_start);
 	START_CYCLE_COUNT(start_count);
-	ReadImage("95x88.bmp");
+	ReadImage("100x100.bmp");
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za citanje: ",final_count);
-
 
 	//WriteImage("lb", pixels, COLORED);
 
 	//converting to gray
+	
+	sysreg_bit_set(sysreg_FLAGS, FLG5);	
 	START_CYCLE_COUNT(start_count);
 	to_gray();
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za grayscale: ",final_count);
 
-	//WriteImage("Gray", gray_pix_arr, GRAY);
+	WriteImage("Gray", gray_pix_arr, GRAY);
 
 	// detecting edges
-
+	sysreg_bit_set(sysreg_FLAGS, FLG6);	
+		
 	START_CYCLE_COUNT(start_count);
 	sobel_edge_detector(gray_pix_arr, &edged_pix_array, width, height);
 	STOP_CYCLE_COUNT(final_count,start_count);
@@ -1128,18 +1182,22 @@ int main() {
 
 	WriteImage("Edged", edged_pix_array, GRAY);
 	//labeling----coding image
+	SRU(HIGH,DAI_PB03_I);	
+	
 	START_CYCLE_COUNT(start_count);
 	labeling(edged_pix_array, width, height);
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za kodovanje slike: ",final_count);
 
+	
+	SRU(HIGH,DAI_PB04_I);	
 	WriteImage("Coded", edged_pix_array, GRAY);
 	START_CYCLE_COUNT(start_count);
 	create_colormap();
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za kreiranje palete boja: ",final_count);
 
-
+	SRU(HIGH,DAI_PB15_I);
 	START_CYCLE_COUNT(start_count);
 	colorImage(edged_pix_array, pixels, width, height);
 	STOP_CYCLE_COUNT(final_count,start_count);
@@ -1147,6 +1205,8 @@ int main() {
 
 
 	//writing image to file
+	
+	SRU(HIGH,DAI_PB16_I);
 	START_CYCLE_COUNT(start_count);
 	WriteImage("Out", pixels, COLORED);
 	STOP_CYCLE_COUNT(final_count,start_count);
@@ -1156,8 +1216,7 @@ int main() {
 	PRINT_CYCLES("Broj ciklusa citav program: ",final_count);
 	// freeing memory
 	heap_free(0,pixels);
-	//free(gray_pix_arr);
-	//free(edged_pix_array);
+	SRU(HIGH,DAI_PB17_I);
 	return 0;
 }
 
