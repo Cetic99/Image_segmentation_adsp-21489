@@ -1,3 +1,13 @@
+/**
+ * @file Segmentacija_slike.c
+ * @author Nikola Cetić (nikolacetic8@gmail.com)
+ * @brief This file contains everything that is needed for image segmentation
+ * @version 0.1
+ * @date 2023-02-11
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 /*****************************************************************************
  * Segmentacija_slike.c
  *****************************************************************************/
@@ -33,6 +43,7 @@
 
 
 //-----------------------COMPILING------------------------
+const char * filename = "67x56.bmp";
 //NO OPTIMIZATION
 #define READ_1
 #define WRITE_1
@@ -111,17 +122,29 @@ uint32 bytesPerPixel;
 //========================================================
 
 
-
+/**
+ * @brief specify image type, GRAY or Colored
+ * 
+ */
 typedef enum im_type {
 	GRAY, COLORED
 } type;
 
 #define SIZE 256
+/**
+ * @brief Used for keeping colormap
+ * 
+ */
 typedef struct rgb {
 	byte r, g, b;
 } RGB;
 RGB colormap[SIZE] = { 0 };
 
+
+/**
+ * @brief Create a colormap object
+ * 
+ */
 void create_colormap(void) {
 	srand(time(0));
 #pragma SIMD_for
@@ -133,7 +156,12 @@ void create_colormap(void) {
 }
 
 #ifdef KNOWN_IMAGE_SIZE_READ
-// This is used when you know size of image
+/**
+ * @brief Reading image from filesystem
+ * @details This is used when image size is known at compile time
+ * 
+ * @param fileName 
+ */
 void ReadImage(const char *fileName) {
 	FILE *imageFile = fopen(fileName, "r");
 	if (imageFile == NULL) {
@@ -229,6 +257,11 @@ void ReadImage(const char *fileName) {
 #endif
 
 #ifdef READ_1
+/**
+ * @brief Reading image from filesystem
+ * @details This function is used when image size is unknown at compile time
+ * @param fileName 
+ */
 void ReadImage(const char *fileName) {
 	FILE *imageFile = fopen(fileName, "r");
 	if (imageFile == NULL) {
@@ -324,6 +357,13 @@ void ReadImage(const char *fileName) {
 #endif
 
 #ifdef WRITE_1
+/**
+ * @brief Writing image to filesystem
+ * 
+ * @param fileName Name of file
+ * @param pixels Array of bytes
+ * @param t Type of image, GRAY or COLORED
+ */
 void WriteImage(const char *fileName, byte* pixels, type t) {
 	uint32 bytesPerPixel;
 	if (t == GRAY)
@@ -499,6 +539,10 @@ void WriteImage(const char *fileName, byte* pixels, type t) {
 #endif
 
 #ifdef GRAY_1
+/**
+ * @brief Conversion to Grayscale image
+ * 
+ */
 void to_gray(void) {
 	bytesPerPixel = 1;
 	gray_pix_arr = (byte *) heap_malloc(0, height * width);
@@ -519,6 +563,16 @@ void to_gray(void) {
 #endif
 
 #ifdef CONVOLUTION_NO_OPT
+/**
+ * @brief 2D convolution of image, Without optimization
+ * 
+ * @param pixels Array of pixels to be convolved
+ * @param kernel 3x3 kernel for convolution
+ * @param row Specifying row of main pixel
+ * @param column Specifying column of main pixel
+ * @param width Width of Image
+ * @return uint32 
+ */
 static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row, uint32 column, uint32 width)
 {
 	byte(*pix_mat)[width] = (byte(*)[width])pixels;
@@ -535,6 +589,16 @@ static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row, u
 #endif
 
 #ifdef CONVOLUTION_PRAGMA
+/**
+ * @brief 2D convolution of image, Pragma Optimization,a and inside loop is unrolled
+ * 
+ * @param pixels Array of pixels to be convolved
+ * @param kernel 3x3 kernel for convolution
+ * @param row Specifying row of main pixel
+ * @param column Specifying column of main pixel
+ * @param width Width of Image
+ * @return uint32 
+ */
 static inline uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, uint32 column, uint32 width)
 {
 	byte(*pix_mat)[width] = (byte(*)[width])pixels;
@@ -551,6 +615,16 @@ static inline uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, 
 #endif
 
 #ifdef CONVOLUTION_UNROLL
+/**
+ * @brief 2D convolution of image, unrolled loops
+ * 
+ * @param pixels Array of pixels to be convolved
+ * @param kernel 3x3 kernel for convolution
+ * @param row Specifying row of main pixel
+ * @param column Specifying column of main pixel
+ * @param width Width of Image
+ * @return uint32 
+ */
 static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row,
 		uint32 column, uint32 width) {
 	byte (*pix_mat)[width] = (byte (*)[width]) pixels;
@@ -571,6 +645,13 @@ static inline uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row,
 #endif
 
 #ifdef NORMALIZATION_NO_OPT
+/**
+ * @brief Normalizing array to 0-255, no optimization
+ * 
+ * @param pixels Array of pixels to be normalized
+ * @param width Width of image
+ * @param height Height of image
+ */
 void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 	uint32 min = INT_MAX, max = 0, i;
 	uint32 length = height * width;
@@ -613,7 +694,15 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 }
 #endif
 
+
 #ifdef KNOWN_IMAGE_SIZE_NORMALIZATION
+/**
+ * @brief Normalizing array to 0-255, used when image size if known at compile time
+ * 
+ * @param pixels Array of pixels to be normalized
+ * @param width Width of image
+ * @param height Height of image
+ */
 void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 	uint32 min = INT_MAX, max = 0, i;
 	uint32 length = H * W;
@@ -637,6 +726,14 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 
 
 #ifdef EDGE_NO_OPT
+/**
+ * @brief Edge detection using Sobel kernel, no optimization
+ * 
+ * @param pixels Input Array of pixels
+ * @param out_pixels Output Array of pixels
+ * @param width Width of image
+ * @param height Height of image
+ */
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
@@ -676,6 +773,14 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 #endif
 
 #ifdef KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
+/**
+ * @brief Edge detection using Sobel kernel, used when image size is known at compile time
+ * 
+ * @param pixels Input Array of pixels
+ * @param out_pixels Output Array of pixels
+ * @param width Width of image
+ * @param height Height of image
+ */
 void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 		uint32 height) {
 	uint32 i, j, gx, gy;
@@ -710,6 +815,14 @@ void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
 #endif
 
 #ifdef LABELING_V1
+/**
+ * @brief Labeling image using Conected Component algorithm
+ * @details First type
+ * 
+ * @param edge_im Array of pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
 void labeling(byte * edge_im, uint32 w,uint32 h)
 
 {
@@ -817,6 +930,14 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 #endif
 
 #ifdef LABELING_V2
+/**
+ * @brief Labeling image using Conected Component algorithm
+ * @details Second type
+ * 
+ * @param edge_im Array of pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
 void labeling(byte * edge_im, uint32 w, uint32 h)
 
 {
@@ -909,6 +1030,14 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 #endif
 
 #ifdef KNOWN_IMAGE_SIZE_LABELING_1
+/**
+ * @brief Labeling image using Conected Component algorithm
+ * @details Used when image size is known at compile time, Without optimization
+ * 
+ * @param edge_im Array of pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
 void labeling(byte * edge_im, uint32 w, uint32 h)
 
 {
@@ -996,6 +1125,14 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 #endif
 
 #ifdef KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
+/**
+ * @brief Labeling image using Conected Component algorithm
+ * @details Used when image size is known at compile time, With optimization
+ * 
+ * @param edge_im Array of pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
 void labeling(byte * edge_im, uint32 w, uint32 h)
 
 {
@@ -1089,6 +1226,14 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
 #endif
 
 #ifdef COLOR_IMAGE_NO_OPT
+/**
+ * @brief Coloring image based on colormap created with function create_colormap()
+ * 
+ * @param labeled_im Input Array of pixels after labeling
+ * @param colored_im Output Array of colored pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
 void colorImage(byte * labeled_im, byte* colored_im, uint32 w, uint32 h) {
 	uint32 num_iter = w * h;
 	uint32 counter = 1;
@@ -1103,7 +1248,10 @@ void colorImage(byte * labeled_im, byte* colored_im, uint32 w, uint32 h) {
 }
 #endif
 
-
+/**
+ * @brief Initialization of LEDs
+ * 
+ */
 void InitSRU(void){	//** LED01**//
 		SRU(HIGH,DPI_PBEN06_I);	
 		SRU(FLAG4_O,DPI_PB06_I);	//** LED02**//	
@@ -1156,7 +1304,7 @@ int main() {
 	sysreg_bit_set(sysreg_FLAGS, FLG4);	
 	START_CYCLE_COUNT(program_start);
 	START_CYCLE_COUNT(start_count);
-	ReadImage("100x100.bmp");
+	ReadImage(filename);
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za citanje: ",final_count);
 
