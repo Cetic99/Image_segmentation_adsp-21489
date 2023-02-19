@@ -31,7 +31,7 @@
 							</tool>
 							<tool id="sharc.toolchain.compiler.1055159499" name="CrossCore SHARC C/C++ Compiler" superClass="sharc.toolchain.compiler">
 								<option id="compiler.option.optimization.1719395187" name="Enable optimization (-O)" superClass="compiler.option.optimization" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="compiler.option.debugcode.383737314" name="Generate debug information (-g)" superClass="compiler.option.debugcode" useByScannerDiscovery="false" value="false" valueType="boolean"/>
+								<option id="compiler.option.debugcode.383737314" name="Generate debug information (-g)" superClass="compiler.option.debugcode" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="compiler.option.proc.1566190384" name="-proc" superClass="compiler.option.proc" useByScannerDiscovery="false" value=" ADSP-21489" valueType="string"/>
 								<option id="compiler.option.sirevision.886178308" name="-si-revision" superClass="compiler.option.sirevision" useByScannerDiscovery="false" value=" 0.2" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="compiler.option.preprocessdefs.740674182" name="Preprocessor definitions (-D):" superClass="compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
@@ -47,7 +47,7 @@
 								<option id="sharc.compiler.option.linearsimd.628966953" name="Allow automatic SIMD code generation in linear code (-linear-simd)" superClass="sharc.compiler.option.linearsimd" value="true" valueType="boolean"/>
 								<option id="sharc.compiler.option.loopsimd.328129561" name="Allow automatic SIMD code generation in loops, aggregate assignments and inlined memcpy operations (-loop-simd)" superClass="sharc.compiler.option.loopsimd" value="true" valueType="boolean"/>
 								<option id="compiler.option.codesize.1983120240" name="Optimize for code size/speed (0 - smallest, 100 - fastest) (-Ov)" superClass="compiler.option.codesize" value="100" valueType="string"/>
-								<option id="compiler.option.compilerprofiling.824816634" superClass="compiler.option.compilerprofiling" value="false" valueType="boolean"/>
+								<option id="compiler.option.compilerprofiling.824816634" name="Enable compiler instrumented profiling (-p)" superClass="compiler.option.compilerprofiling" value="false" valueType="boolean"/>
 								<inputType id="compiler.inputType.1983004914" name="C/C++ Source" superClass="compiler.inputType"/>
 							</tool>
 							<tool id="sharc.toolchain.linker.167608421" name="CrossCore SHARC Linker" superClass="sharc.toolchain.linker">

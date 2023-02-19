@@ -1,9 +1,11 @@
 /*****************************************************************************
- * Segmentacija_slike.h
+ * image_segmentation.h
  *****************************************************************************/
 
-#ifndef __SEGMENTACIJA_SLIKE_H__
-#define __SEGMENTACIJA_SLIKE_H__
+#ifndef __IMAGE_SEGMENTATION_H__
+#define __IMAGE_SEGMENTATION_H__
+
+/* Add your custom header content here */
 
 /* Add your custom header content here */
 #include <stdio.h>
@@ -24,7 +26,7 @@ typedef unsigned char byte;
 //========================================================
 
 //-----------------MEMORY MAPPING SECTIONS----------------
-extern const uint32 uid;
+const uint32 uid = 999;
 #pragma section("pixels_3b")
 static byte pixels_3b[45001];
 int index_pixels_3b;
@@ -43,12 +45,12 @@ uint32 bytesPerPixel;
 
 
 //-----------------------COMPILING------------------------
-extern const char * filename;
+const char * filename = "100x100.bmp";
 //NO OPTIMIZATION
 #define READ_1
 #define WRITE_1
 #define GRAY_1
-#define CONVOLUTION_UNROLL_INLINE
+#define CONVOLUTION_NO_OPT
 #define NORMALIZATION_NO_OPT
 #define EDGE_NO_OPT
 #define LABELING_V1
@@ -70,16 +72,6 @@ extern const char * filename;
 // #define WRITE_1
 // #define GRAY_1
 // #define CONVOLUTION_UNROLL
-// #define NORMALIZATION_PRAGMA
-// #define EDGE_NO_OPT
-// #define LABELING_V2
-// #define COLOR_IMAGE_NO_OPT
-
-// //OPTIMIZED CONVOLUTION FUNCTION INLINE
-// #define READ_1
-// #define WRITE_1
-// #define GRAY_1
-// #define CONVOLUTION_UNROLL_INLINE
 // #define NORMALIZATION_PRAGMA
 // #define EDGE_NO_OPT
 // #define LABELING_V2
@@ -114,17 +106,20 @@ extern const char * filename;
 typedef struct rgb {
 	byte r, g, b;
 } RGB;
+RGB colormap[SIZE] = { 0 };
+
 
 /**
  * @brief Create a colormap object
  *
  */
-void create_colormap(void);
-
-/**
- * @brief Conversion to Grayscale image
- *
- */
-void to_gray(void);
-
-#endif /* __SEGMENTACIJA_SLIKE_H__ */
+void create_colormap(void) {
+	srand(time(0));
+#pragma SIMD_for
+	for (int i = 1; i < SIZE; i++) {
+		colormap[i].r = rand();
+		colormap[i].g = rand();
+		colormap[i].b = rand();
+	}
+}
+#endif /* __IMAGE_SEGMENTATION_H__ */
