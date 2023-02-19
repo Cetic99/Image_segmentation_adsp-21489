@@ -17,9 +17,9 @@
 #include "Segmentacija_slike.h"
 #include "read_write.h"
 #include "convolution.h"
+#include "sobel_edge_detection.h"
+#include "labeling.h"
 
-#define EDGE_VAL                0
-#define NUM_LABELS              50000
 
 
 const char * filename = "100x100.bmp";
@@ -45,7 +45,7 @@ void create_colormap(void) {
  * @brief Conversion to Grayscale image
  * 
  */
-void to_gray(void) {
+inline void to_gray(byte * restrict pixels) {
 	bytesPerPixel = 1;
 	gray_pix_arr = (byte *) heap_malloc(0, height * width);
 	if (gray_pix_arr == NULL) {
@@ -63,591 +63,40 @@ void to_gray(void) {
 	}
 }
 #endif
-
-
-
-#ifdef NORMALIZATION_NO_OPT
+#ifdef GRAY_PIPELINE
 /**
- * @brief Normalizing array to 0-255, no optimization
- * 
- * @param pixels Array of pixels to be normalized
- * @param width Width of image
- * @param height Height of image
+ * @brief Conversion to Grayscale image
+ *
  */
-void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
-	uint32 min = INT_MAX, max = 0, i;
-	uint32 length = height * width;
-	for (i = 0; i < length; i++) {
-		if (pixels[i] < min) {
-			min = pixels[i];
-		}
-		if (pixels[i] > max) {
-			max = pixels[i];
-		}
+void to_gray(byte* restrict pixels) {
+	bytesPerPixel = 1;
+	gray_pix_arr = (byte *) heap_malloc(0, height * width);
+	if (gray_pix_arr == NULL) {
+		printf("Nije instancirana memorija\n");
+		return;
 	}
-	double sub = max - min;
-	double ratio;
-	for (i = 0; i < length; i++) {
-		ratio = (double) (pixels[i] - min) / sub;
-		pixels[i] = ratio * 255;
-	}
-}
-#endif
+	int pix_position = 0;
+	int num_iter = height * width;
 
-#ifdef NORMALIZATION_PRAGMA
-void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
-	uint32 min = INT_MAX, max = 0, i;
-	uint32 length = height * width;
-	for (i = 0; i < length; i++) {
-		if (pixels[i] < min) {
-			min = pixels[i];
-		}
-		if (pixels[i] > max) {
-			max = pixels[i];
-		}
-	}
-	double sub = max - min;
-	double ratio;
-	#pragma vector_for
-	for (i = 0; i < length; i++) {
-		ratio = (double) (pixels[i] - min) / sub;
-		pixels[i] = ratio * 255;
+	int temp = 0;
+	int component;
+	component =pixels[pix_position];
+	for (int i = 0; i < num_iter; i++) {
+		temp += (char) ((float) component * 0.114);
+		component = pixels[pix_position + 1];
+		temp += (char) ((float) component * 0.587);
+		component = pixels[pix_position + 2];
+		temp += (char) ((float) component * 0.299);
+
+		gray_pix_arr[i]=temp;
+		pix_position = (i+1) * 3;
+		temp = 0;
 	}
 }
 #endif
 
 
-#ifdef KNOWN_IMAGE_SIZE_NORMALIZATION
-/**
- * @brief Normalizing array to 0-255, used when image size if known at compile time
- * 
- * @param pixels Array of pixels to be normalized
- * @param width Width of image
- * @param height Height of image
- */
-void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
-	uint32 min = INT_MAX, max = 0, i;
-	uint32 length = H * W;
-	for (i = 0; i < length; i++) {
-		if (pixels[i] < min) {
-			min = pixels[i];
-		}
-		if (pixels[i] > max) {
-			max = pixels[i];
-		}
-	}
-	double sub = max - min;
-	double ratio;
-#pragma vector_for
-	for (i = 0; i < length; i++) {
-		ratio = (double) (pixels[i] - min) / sub;
-		pixels[i] = ratio * 255;
-	}
-}
-#endif
 
-
-#ifdef EDGE_NO_OPT
-/**
- * @brief Edge detection using Sobel kernel, no optimization
- * 
- * @param pixels Input Array of pixels
- * @param out_pixels Output Array of pixels
- * @param width Width of image
- * @param height Height of image
- */
-void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
-		uint32 height) {
-	uint32 i, j, gx, gy;
-
-	//byte *edged_pixels_arr = (byte *)malloc(width * height);                            // creating array of bytes
-	*out_pixels = pixels;         // assigning array to output pointer
-
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0,
-			width * height * sizeof(uint32));
-	if (edged_pixels_arr_uint32 == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	*out_pixels = edged_pixels_arr_uint32;         // assigning array to output pointer
-	//uint32 *edged_pixels_arr_uint32 = (uint32 *)malloc(width * height * sizeof(uint32));    // creating array of uint32
-	uint32 (*edged_pixels_mat_uint32)[width] =
-			(uint32 (*)[width]) edged_pixels_arr_uint32; // converting array to matrix
-
-	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
-	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
-
-	for (i = 1; i < height - 1; i++) {
-		for (j = 1; j < width - 1; j++) {
-			gx = convolution(pixels, mx, i, j, width);
-			gy = convolution(pixels, my, i, j, width);
-			edged_pixels_mat_uint32[i][j] = sqrt(gx * gx + gy * gy);
-		}
-		// printf("Convolved!\n");
-	}
-	// printf("Done with convolution!\n");
-	min_max_normalization(edged_pixels_arr_uint32, width, height);
-//	for (i = 0; i < height * width; i++) {
-//		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
-//		// printf("%d",edged_pixels_arr[i]);
-//	}
-	//heap_free(0,edged_pixels_arr_uint32);
-	heap_free(0,pixels);
-}
-#endif
-
-#ifdef KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
-/**
- * @brief Edge detection using Sobel kernel, used when image size is known at compile time
- * 
- * @param pixels Input Array of pixels
- * @param out_pixels Output Array of pixels
- * @param width Width of image
- * @param height Height of image
- */
-void sobel_edge_detector(byte *pixels, byte **out_pixels, uint32 width,
-		uint32 height) {
-	uint32 i, j, gx, gy;
-	*out_pixels = pixels;         // assigning array to output pointer
-
-	uint32 *edged_pixels_arr_uint32 = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
-	if (edged_pixels_arr_uint32 == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	uint32 (*edged_pixels_mat_uint32)[W] = (uint32 (*)[W]) edged_pixels_arr_uint32; // converting array to matrix
-
-	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
-	int32 my[3][3] = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
-
-	for (i = 1; i < H - 1; i++) {
-		for (j = 1; j < W - 1; j++) {
-			gx = convolution(pixels, mx, i, j, width);
-			gy = convolution(pixels, my, i, j, width);
-			edged_pixels_mat_uint32[i][j] = gx * gx + gy * gy;//sqrt(gx * gx + gy * gy);
-		}
-		// printf("Convolved!\n");
-	}
-	// printf("Done with convolution!\n");
-	min_max_normalization(edged_pixels_arr_uint32, W, H);
-	for (i = 0; i < H * W; i++) {
-		pixels[i] = edged_pixels_arr_uint32[i]; //converting from 32bit to 8bit
-		// printf("%d",edged_pixels_arr[i]);
-	}
-	heap_free(0,edged_pixels_arr_uint32);
-}
-#endif
-
-#ifdef LABELING_V1
-/**
- * @brief Labeling image using Conected Component algorithm
- * @details First type
- * 
- * @param edge_im Array of pixels
- * @param w Width of image
- * @param h Height of image
- */
-void labeling(byte * edge_im, uint32 w,uint32 h)
-
-{
-	// binary conversion
-	for(int i =0; i<w*h;i++)
-	{
-		if(edge_im[i] > 7)
-		edge_im[i] = 0;
-		else
-		edge_im[i] = 1;
-	}
-	/*
-	 Maybe is better to make new matrix with values of edges UINT_MAX
-	 With this it will be possible to remove EDGE_VAL in if statement
-	 WAITING FOR NEXT ITERATION!!!!!!!
-	 */
-	byte (*mat_val)[w] = (byte(*)[w])edge_im;
-	uint32 *parent = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
-	if (parent == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	for(int i = 0;i<w*h;i++)                // Everyone is it's own parent
-	{
-		parent[i] = i;
-	}
-	uint32 label_counter = 1;
-	uint32 min_neighbour;
-//	uint32 *mat_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
-//	if (mat_arr == NULL) {
-//		printf("Nije instancirana memorija\n");
-//		return;
-//	}
-//	for( int i = 0; i< w*h; i++) {
-//		mat_arr[i] = edge_im[i];
-//	}
-//	uint32 (*mat_val)[w] = (uint32(*)[w])mat_arr;
-
-	for(int i = 1; i< h-1; i++)
-	{
-		for(int j = 1; j < w-1; j++)
-		{
-			min_neighbour = UINT_MAX;
-			if(mat_val[i][j] == EDGE_VAL)
-			{
-				continue;
-			}
-			if (mat_val[i-1][j-1] > EDGE_VAL && mat_val[i-1][j-1] < min_neighbour)
-			{
-				min_neighbour = mat_val[i-1][j-1];
-			}
-			if (mat_val[i-1][j] > EDGE_VAL && mat_val[i-1][j] < min_neighbour)
-			{
-				min_neighbour = mat_val[i-1][j];
-			}
-			if (mat_val[i-1][j+1] > EDGE_VAL && mat_val[i-1][j+1] < min_neighbour)
-			{
-				min_neighbour = mat_val[i-1][j+1];
-			}
-			if (mat_val[i][j-1] > EDGE_VAL && mat_val[i][j-1] < min_neighbour)
-			{
-				min_neighbour = mat_val[i][j-1];
-			}
-			if(min_neighbour == UINT_MAX)
-			{
-				label_counter++;
-				min_neighbour = label_counter;
-			}
-			mat_val[i][j] = min_neighbour; //assigning this pixel its label value
-			if (mat_val[i-1][j+1] > EDGE_VAL && mat_val[i-1][j+1] > min_neighbour)
-			{
-				parent[mat_val[i-1][j+1]] = min_neighbour;
-			}
-			if (mat_val[i-1][j] > EDGE_VAL && mat_val[i-1][j] > min_neighbour)
-			{
-				parent[mat_val[i-1][j]] = min_neighbour;
-			}
-		}
-	}
-	int i = 0;
-	int j = 0;
-	for(i = 0; i < label_counter; i++)
-	{
-		j = i;
-		while(parent[j] != j) {
-			j = parent[j];
-		}
-		parent[i] = j;
-	}
-	for(i = 0; i< h; i++)
-	{
-		for(j = 0; j < w; j++)
-		{
-			mat_val[i][j] = parent[mat_val[i][j]];
-		}
-	}
-	min_max_normalization(edge_im, w, h);
-//	for(i = 0; i<w*h; i++) {
-//		edge_im[i] = mat_arr[i];
-//	}
-	heap_free(0,parent);
-//	heap_free(0,mat_arr);
-
-}
-#endif
-
-#ifdef LABELING_V2
-/**
- * @brief Labeling image using Conected Component algorithm
- * @details Second type
- * 
- * @param edge_im Array of pixels
- * @param w Width of image
- * @param h Height of image
- */
-void labeling(byte * edge_im, uint32 w, uint32 h)
-
-{
-	// binary conversion
-#pragma SIMD_for
-	for (int i = 0; i < w * h; i++) {
-		if (edge_im[i] > 7)
-			edge_im[i] = 0;
-		else
-			edge_im[i] = 1;
-	}
-
-	byte (*edge_mat)[w] = (byte (*)[w]) edge_im;
-	uint32 *parent_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
-	if (parent_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-#pragma vector_for
-	for (int i = 0; i < w*h; i++)          // Everyone is it's own parent
-	{
-		parent_arr[i] = i;
-	}
-	uint32 label_counter = w*h;
-	uint32 max_neighbour;
-	uint32 *mat_arr = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
-	if (mat_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-#pragma vector_for(4)
-	for (int i = 0; i < w * h; i++) {
-		mat_arr[i] = edge_im[i];
-	}
-	uint32 (*mat_val)[w] = (uint32 (*)[w]) mat_arr;
-
-	for (int i = 1; i < h - 1; i++) {
-		for (int j = 1; j < w - 1; j++) {
-			max_neighbour = 1;
-			if (edge_mat[i][j] == EDGE_VAL) {
-				continue;
-			}
-			if (mat_val[i - 1][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j - 1];
-			}
-			if (mat_val[i - 1][j] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j];
-			}
-			if (mat_val[i - 1][j + 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j + 1];
-			}
-			if (mat_val[i][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i][j - 1];
-			}
-			if (max_neighbour == 1) {
-				label_counter--;
-				max_neighbour = label_counter;
-			}
-			mat_val[i][j] = max_neighbour; //assigning this pixel its label value
-			if (mat_val[i - 1][j + 1] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j + 1]] = max_neighbour;
-			}
-			if (mat_val[i - 1][j] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j]] = max_neighbour;
-			}
-		}
-	}
-	int i = 0;
-	int j = 0;
-#pragma SIMD_for
-	for (i = w*h; i >= label_counter; i--) {
-		j = i;
-		while (parent_arr[j] != j) {
-			j = parent_arr[j];
-		}
-		parent_arr[i] = j;
-	}
-#pragma vector_for
-	for (i = 0; i < h * w; i++) {
-		mat_arr[i] = parent_arr[mat_arr[i]];
-	}
-	min_max_normalization(mat_arr, w, h);
-#pragma SIMD_for
-	for (i = 0; i < w * h; i++) {
-		edge_im[i] = mat_arr[i];
-	}
-	heap_free(0,parent_arr);
-	heap_free(0,mat_arr);
-}
-#endif
-
-#ifdef KNOWN_IMAGE_SIZE_LABELING_1
-/**
- * @brief Labeling image using Conected Component algorithm
- * @details Used when image size is known at compile time, Without optimization
- * 
- * @param edge_im Array of pixels
- * @param w Width of image
- * @param h Height of image
- */
-void labeling(byte * edge_im, uint32 w, uint32 h)
-
-{
-	// binary conversion
-	for (int i = 0; i < W * H; i++) {
-		if (edge_im[i] > 10)
-			edge_im[i] = 0;
-		else
-			edge_im[i] = 1;
-	}
-
-	byte (*edge_mat)[W] = (byte (*)[W]) edge_im;
-	uint32 *parent_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
-	if (parent_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	//uint32 *parent = malloc(w*h*4);
-	for (int i = 0; i < W*H; i++)          // Everyone is it's own parent
-	{
-		parent_arr[i] = i;
-	}
-	uint32 label_counter = W*H;
-	uint32 max_neighbour;
-	uint32 *mat_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
-	if (mat_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	for (int i = 0; i < W * H; i++) {
-		mat_arr[i] = edge_im[i];
-	}
-	uint32 (*mat_val)[W] = (uint32 (*)[W]) mat_arr;
-
-	for (int i = 1; i < H - 1; i++) {
-		for (int j = 1; j < W - 1; j++) {
-			max_neighbour = 1;
-			if (edge_mat[i][j] == EDGE_VAL) {
-				continue;
-			}
-			if (mat_val[i - 1][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j - 1];
-			}
-			if (mat_val[i - 1][j] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j];
-			}
-			if (mat_val[i - 1][j + 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j + 1];
-			}
-			if (mat_val[i][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i][j - 1];
-			}
-			if (max_neighbour == 1) {
-				label_counter--;
-				max_neighbour = label_counter;
-			}
-			mat_val[i][j] = max_neighbour; //assigning this pixel its label value
-			if (mat_val[i - 1][j + 1] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j + 1]] = max_neighbour;
-			}
-			if (mat_val[i - 1][j] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j]] = max_neighbour;
-			}
-		}
-	}
-	int i = 0;
-	int j = 0;
-	for (i = W*H; i >= label_counter; i--) {
-		j = i;
-		while (parent_arr[j] != j) {
-			j = parent_arr[j];
-		}
-		parent_arr[i] = j;
-	}
-	for (i = 0; i < H * W; i++) {
-		mat_arr[i] = parent_arr[mat_arr[i]];
-	}
-	min_max_normalization(mat_arr, W, H);
-	for (i = 0; i < W * H; i++) {
-		edge_im[i] = mat_arr[i];
-	}
-	free(parent_arr);
-
-}
-#endif
-
-#ifdef KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
-/**
- * @brief Labeling image using Conected Component algorithm
- * @details Used when image size is known at compile time, With optimization
- * 
- * @param edge_im Array of pixels
- * @param w Width of image
- * @param h Height of image
- */
-void labeling(byte * edge_im, uint32 w, uint32 h)
-
-{
-	// binary conversion
-#pragma SIMD_for
-	for (int i = 0; i < W * H; i++) {
-		if (edge_im[i] > 10)
-			edge_im[i] = 0;
-		else
-			edge_im[i] = 1;
-	}
-
-	byte (*edge_mat)[W] = (byte (*)[W]) edge_im;
-	uint32 *parent_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
-	if (parent_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-#pragma vector_for
-	for (int i = 0; i < W*H; i++)          // Everyone is it's own parent
-	{
-		parent_arr[i] = i;
-	}
-	uint32 label_counter = W*H;
-	uint32 max_neighbour;
-	uint32 *mat_arr = (uint32 *) heap_malloc(0, W * H * sizeof(uint32));
-	if (mat_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-#pragma vector_for(4)
-	for (int i = 0; i < W * H; i++) {
-		mat_arr[i] = edge_im[i];
-	}
-	uint32 (*mat_val)[W] = (uint32 (*)[W]) mat_arr;
-
-
-	for (int i = 1; i < H - 1; i++) {
-		for (int j = 1; j < W - 1; j++) {
-			max_neighbour = 1;
-			if (edge_mat[i][j] == EDGE_VAL) {
-				continue;
-			}
-			if (mat_val[i - 1][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j - 1];
-			}
-			if (mat_val[i - 1][j] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j];
-			}
-			if (mat_val[i - 1][j + 1] > max_neighbour) {
-				max_neighbour = mat_val[i - 1][j + 1];
-			}
-			if (mat_val[i][j - 1] > max_neighbour) {
-				max_neighbour = mat_val[i][j - 1];
-			}
-			if (max_neighbour == 1) {
-				label_counter--;
-				max_neighbour = label_counter;
-			}
-			mat_val[i][j] = max_neighbour; //assigning this pixel its label value
-			if (mat_val[i - 1][j + 1] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j + 1]] = max_neighbour;
-			}
-			if (mat_val[i - 1][j] < max_neighbour) {
-				parent_arr[mat_val[i - 1][j]] = max_neighbour;
-			}
-		}
-	}
-	int i = 0;
-	int j = 0;
-#pragma SIMD_for
-	for (i = W*H; i >= label_counter; i--) {
-		j = i;
-		while (parent_arr[j] != j) {
-			j = parent_arr[j];
-		}
-		parent_arr[i] = j;
-	}
-#pragma vector_for
-	for (i = 0; i < H * W; i++) {
-		mat_arr[i] = parent_arr[mat_arr[i]];
-	}
-	min_max_normalization(mat_arr, W, H);
-#pragma SIMD_for
-	for (i = 0; i < W * H; i++) {
-		edge_im[i] = mat_arr[i];
-	}
-	heap_free(0,parent_arr);
-	heap_free(0,mat_arr);
-}
-#endif
 
 #ifdef COLOR_IMAGE_NO_OPT
 /**
@@ -659,6 +108,29 @@ void labeling(byte * edge_im, uint32 w, uint32 h)
  * @param h Height of image
  */
 void colorImage(byte * labeled_im, byte* colored_im, uint32 w, uint32 h) {
+	uint32 num_iter = w * h;
+	uint32 counter = 1;
+
+	for (int i = 0; i < num_iter; i++) {
+		counter = i * 3;
+		//*((int*) (colored_im + counter)) = colormap[labeled_im[i]].number;
+		colored_im[counter] = colormap[labeled_im[i]].r;
+		colored_im[counter+1] = colormap[labeled_im[i]].g;
+		colored_im[counter+2] = colormap[labeled_im[i]].b;
+	}
+}
+#endif
+
+#ifdef COLOR_IMAGE_PIPELINE
+/**
+ * @brief Coloring image based on colormap created with function create_colormap()
+ *
+ * @param labeled_im Input Array of pixels after labeling
+ * @param colored_im Output Array of colored pixels
+ * @param w Width of image
+ * @param h Height of image
+ */
+void colorImage(byte * restrict labeled_im, byte* restrict colored_im, uint32 w, uint32 h) {
 	uint32 num_iter = w * h;
 	uint32 counter = 1;
 
@@ -738,7 +210,7 @@ int main() {
 	
 	sysreg_bit_set(sysreg_FLAGS, FLG5);	
 	START_CYCLE_COUNT(start_count);
-	to_gray();
+	to_gray(pixels);
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za grayscale: ",final_count);
 

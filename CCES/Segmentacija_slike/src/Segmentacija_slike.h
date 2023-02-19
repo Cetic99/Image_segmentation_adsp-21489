@@ -16,6 +16,9 @@
 #include <sru21489.h>
 #include <SYSREG.h>
 
+#define EDGE_VAL                0
+#define NUM_LABELS              50000
+
 //---------------------TYPES DEFINITION-------------------
 typedef unsigned int uint32;
 typedef signed int int32;
@@ -47,7 +50,7 @@ extern const char * filename;
 //NO OPTIMIZATION
 #define READ_1
 #define WRITE_1
-#define GRAY_1
+#define GRAY_PIPELINE
 #define CONVOLUTION_UNROLL_INLINE
 #define NORMALIZATION_NO_OPT
 #define EDGE_NO_OPT
@@ -125,6 +128,6 @@ void create_colormap(void);
  * @brief Conversion to Grayscale image
  *
  */
-void to_gray(void);
+void to_gray(byte * restrict pixels);
 
 #endif /* __SEGMENTACIJA_SLIKE_H__ */
