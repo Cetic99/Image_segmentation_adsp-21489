@@ -544,30 +544,6 @@ PROCESSOR p0
 		INPUT_SECTIONS( $OBJECTS(pixels_3b) )
 	} > mem_sram
 	
-	dxe_pixels_gray
-	{
-		INPUT_SECTIONS( $OBJECTS(pixels_gray) )
-	} > mem_sram
-	
-	dxe_parent
-	{
-		INPUT_SECTIONS( $OBJECTS(parent) )
-	} > mem_sram
-	
-	dxe_mat_array
-	{
-		INPUT_SECTIONS( $OBJECTS(mat_array) )
-	} > mem_sram
-	
-	dxe_edged_pixels_array
-	{
-		INPUT_SECTIONS( $OBJECTS(edged_pixels_array) )
-	} > mem_sram
-	
-	dxe_edged_pixels_array_uint32
-	{
-		INPUT_SECTIONS( $OBJECTS(edged_pixels_array_uint32) )
-	} > mem_sram
 	
    } /* SECTIONS */
 

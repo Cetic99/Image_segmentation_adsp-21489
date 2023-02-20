@@ -45,7 +45,7 @@ uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row, uint32 column, 
  * @param width Width of Image
  * @return uint32
  */
-uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, uint32 column, uint32 width)
+uint32 convolution(byte *restrict pixels, int32 kernel[3][3], uint32 row, uint32 column, uint32 width)
 {
 	byte(*pix_mat)[width] = (byte(*)[width])pixels;
 	uint32 i, j, sum = 0;
@@ -71,7 +71,7 @@ uint32 convolution(byte *pixels, uint32 kernel[3][3], uint32 row, uint32 column,
  * @param width Width of Image
  * @return uint32
  */
-uint32 convolution(byte *pixels, int32 kernel[3][3], uint32 row,
+uint32 convolution(byte * restrict pixels, int32 kernel[3][3], uint32 row,
 		uint32 column, uint32 width) {
 	byte (*pix_mat)[width] = (byte (*)[width]) pixels;
 	uint32 i, j, sum = 0;

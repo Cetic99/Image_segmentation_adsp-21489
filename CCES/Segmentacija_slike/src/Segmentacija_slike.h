@@ -15,6 +15,7 @@
 #include <def21489.h>
 #include <sru21489.h>
 #include <SYSREG.h>
+#include <21489.h>
 
 #define EDGE_VAL                0
 #define NUM_LABELS              50000
@@ -45,16 +46,24 @@ uint32 bytesPerPixel;
 //========================================================
 
 
+//#define READ_1 ||KNOWN_IMAGE_SIZE_READ
+//#define WRITE_1
+//#define GRAY_1
+//#define CONVOLUTION_NO_OPT || CONVOLUTION_UNROLL || CONVOLUTION_PRAGMA || CONVOLUTION_UNROLL_INLINE || CONVOLUTION_PRAGMA_INLINE
+//#define NORMALIZATION_NO_OPT || NORMALIZATION_HARDWARE || KNOWN_IMAGE_SIZE_NORMALIZATION
+//#define EDGE || KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
+//#define LABELING_V1 || LABELING_V2 || LABELING_V2_EXPECTED || KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
+
 //-----------------------COMPILING------------------------
 extern const char * filename;
 //NO OPTIMIZATION
 #define READ_1
 #define WRITE_1
-#define GRAY_PIPELINE
-#define CONVOLUTION_UNROLL_INLINE
-#define NORMALIZATION_NO_OPT
-#define EDGE_NO_OPT
-#define LABELING_V1
+#define GRAY_1
+#define CONVOLUTION_PRAGMA_INLINE
+#define NORMALIZATION_HARDWARE
+#define EDGE
+#define LABELING_V2_EXPECTED
 #define COLOR_IMAGE_NO_OPT
 
 
@@ -91,13 +100,13 @@ extern const char * filename;
 
 //KNOWN IMAGE SIZE
 // #define KNOWN_IMAGE_SIZE_READ
-// #define GRAY_1
-// #define CONVOLUTION_UNROLL
+// #define GRAY_PIPELINE
+// #define CONVOLUTION_UNROLL_INLINE_PIPELINE
 // #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
 // #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
 // #define KNOWN_IMAGE_SIZE_NORMALIZATION
 // #define WRITE_1
-// #define COLOR_IMAGE_NO_OPT
+// #define COLOR_IMAGE_PIPELINE
 
 
 
@@ -105,8 +114,8 @@ extern const char * filename;
 //========================================================
 
 //--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------
-#define H 100
-#define W 100
+#define H 88
+#define W 95
 //========================================================
 
 #define SIZE 256

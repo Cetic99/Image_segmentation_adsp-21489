@@ -37,23 +37,27 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
 }
 #endif
 
-#ifdef NORMALIZATION_PRAGMA
-void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
-	uint32 min = INT_MAX, max = 0, i;
+#ifdef NORMALIZATION_HARDWARE
+/**
+ * @brief Normalizing array to 0-255, used min and max functions
+ *
+ * @param pixels Array of pixels to be normalized
+ * @param width Width of image
+ * @param height Height of image
+ */
+void min_max_normalization(uint32 * restrict pixels, uint32 width, uint32 height) {
+	uint32 min_v = INT_MAX, max_v = 0, i;
 	uint32 length = height * width;
+	int value=0;
 	for (i = 0; i < length; i++) {
-		if (pixels[i] < min) {
-			min = pixels[i];
-		}
-		if (pixels[i] > max) {
-			max = pixels[i];
-		}
+		value = pixels[i];
+		max_v = max(value,max_v);	//hardware accelerated function
+		min_v = min(value,min_v);	//hardware accelerated function
 	}
-	double sub = max - min;
+	double sub = max_v - min_v;
 	double ratio;
-	#pragma vector_for
 	for (i = 0; i < length; i++) {
-		ratio = (double) (pixels[i] - min) / sub;
+		ratio = (double) (pixels[i] - min_v) / sub;
 		pixels[i] = ratio * 255;
 	}
 }
@@ -69,21 +73,19 @@ void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
  * @param height Height of image
  */
 void min_max_normalization(uint32 *pixels, uint32 width, uint32 height) {
-	uint32 min = INT_MAX, max = 0, i;
+	uint32 min_v = INT_MAX, max_v = 0, i;
 	uint32 length = H * W;
-	for (i = 0; i < length; i++) {
-		if (pixels[i] < min) {
-			min = pixels[i];
+	int value=0;
+		for (i = 0; i < length; i++) {
+			value = pixels[i];
+			max_v = max(value,max_v);	//hardware accelerated function
+			min_v = min(value,min_v);	//hardware accelerated function
 		}
-		if (pixels[i] > max) {
-			max = pixels[i];
-		}
-	}
-	double sub = max - min;
+	double sub = max_v - min_v;
 	double ratio;
 #pragma vector_for
 	for (i = 0; i < length; i++) {
-		ratio = (double) (pixels[i] - min) / sub;
+		ratio = (double) (pixels[i] - min_v) / sub;
 		pixels[i] = ratio * 255;
 	}
 }

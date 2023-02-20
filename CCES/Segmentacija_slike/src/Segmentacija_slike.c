@@ -22,7 +22,7 @@
 
 
 
-const char * filename = "100x100.bmp";
+const char * filename = "95x88.bmp";
 const uint32 uid = 999;
 RGB colormap[SIZE] = { 0 };
 /**
@@ -45,7 +45,7 @@ void create_colormap(void) {
  * @brief Conversion to Grayscale image
  * 
  */
-inline void to_gray(byte * restrict pixels) {
+static inline void to_gray(byte * restrict pixels) {
 	bytesPerPixel = 1;
 	gray_pix_arr = (byte *) heap_malloc(0, height * width);
 	if (gray_pix_arr == NULL) {
@@ -60,37 +60,6 @@ inline void to_gray(byte * restrict pixels) {
 		gray_pix_arr[i] = (char) ((float) pixels[pix_position + 2] * 0.299
 				+ (float) pixels[pix_position + 1] * 0.587
 				+ (float) pixels[pix_position] * 0.114);
-	}
-}
-#endif
-#ifdef GRAY_PIPELINE
-/**
- * @brief Conversion to Grayscale image
- *
- */
-void to_gray(byte* restrict pixels) {
-	bytesPerPixel = 1;
-	gray_pix_arr = (byte *) heap_malloc(0, height * width);
-	if (gray_pix_arr == NULL) {
-		printf("Nije instancirana memorija\n");
-		return;
-	}
-	int pix_position = 0;
-	int num_iter = height * width;
-
-	int temp = 0;
-	int component;
-	component =pixels[pix_position];
-	for (int i = 0; i < num_iter; i++) {
-		temp += (char) ((float) component * 0.114);
-		component = pixels[pix_position + 1];
-		temp += (char) ((float) component * 0.587);
-		component = pixels[pix_position + 2];
-		temp += (char) ((float) component * 0.299);
-
-		gray_pix_arr[i]=temp;
-		pix_position = (i+1) * 3;
-		temp = 0;
 	}
 }
 #endif
@@ -243,20 +212,22 @@ int main() {
 
 	WriteImage("Out_NEW", edged_pix_array, CODED);
 
-	SRU(HIGH,DAI_PB15_I);
-	START_CYCLE_COUNT(start_count);
-	colorImage(edged_pix_array, pixels, width, height);
-	STOP_CYCLE_COUNT(final_count,start_count);
-	PRINT_CYCLES("Broj ciklusa za bojenje slike: ",final_count);
-
-
-	//writing image to file
 	
-	SRU(HIGH,DAI_PB16_I);
-	START_CYCLE_COUNT(start_count);
-	WriteImage("Out", pixels, COLORED);
-	STOP_CYCLE_COUNT(final_count,start_count);
-	PRINT_CYCLES("Broj ciklusa za cuvanje slike:  ",final_count);
+	//OVERKILL...
+//	SRU(HIGH,DAI_PB15_I);
+//	START_CYCLE_COUNT(start_count);
+//	colorImage(edged_pix_array, pixels, width, height);
+//	STOP_CYCLE_COUNT(final_count,start_count);
+//	PRINT_CYCLES("Broj ciklusa za bojenje slike: ",final_count);
+//
+//
+//	//writing image to file
+//
+//	SRU(HIGH,DAI_PB16_I);
+//	START_CYCLE_COUNT(start_count);
+//	WriteImage("Out", pixels, COLORED);
+//	STOP_CYCLE_COUNT(final_count,start_count);
+//	PRINT_CYCLES("Broj ciklusa za cuvanje slike:  ",final_count);
 
 	STOP_CYCLE_COUNT(final_count,program_start);
 	PRINT_CYCLES("Broj ciklusa citav program: ",final_count);
