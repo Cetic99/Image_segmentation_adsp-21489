@@ -6,10 +6,16 @@ This repository contains codes written in python using OpenCV, code written in N
 - Image is read, and converted to grayscale
 - Edge detection is done using 2D convolution and Sobel kernel
 - Segmentation is done using Connected Component algorithm(some version of it)
-- Painting is done using random generator
+- Painting is done in code or by writting lookup table in bmp header 
 
 ## How to run
 ### Python and Natural C
-- Terminal
+- Open main.py or main.c in VS Code or some other text editor and change name of image
+- Compile
+- Run
 ### DSP
-- CrossCore Embedded Studio(Not recomended. If you can don't use this tool at all)
+- Clone repository
+- Open project in CCES(Cross Core Embedded Studio)
+- Chose debug configuration to use(Simulation or EZ-KIT)
+- Run debugging
+NOTE: Images needs to be in Debug folder
