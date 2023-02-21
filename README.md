@@ -18,4 +18,5 @@ This repository contains codes written in python using OpenCV, code written in N
 - Open project in CCES(Cross Core Embedded Studio)
 - Chose debug configuration to use(Simulation or EZ-KIT)
 - Run debugging
+
 NOTE: Images needs to be in Debug folder
