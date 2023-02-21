@@ -1,0 +1,200 @@
+\hypertarget{_segmentacija__slike_8c_source}{}\doxysection{Segmentacija\+\_\+slike.\+c}
+\label{_segmentacija__slike_8c_source}\index{src/Segmentacija\_slike.c@{src/Segmentacija\_slike.c}}
+\mbox{\hyperlink{_segmentacija__slike_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00001}00001 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00011}00011 \textcolor{comment}{/*****************************************************************************}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00012}00012 \textcolor{comment}{ * Segmentacija\_slike.c}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00013}00013 \textcolor{comment}{ *****************************************************************************/}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00015}00015 \textcolor{preprocessor}{\#include <sys/platform.h>}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00016}00016 \textcolor{preprocessor}{\#include "{}adi\_initialize.h"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00017}00017 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_segmentacija__slike_8h}{Segmentacija\_slike.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00018}00018 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{read__write_8h}{read\_write.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00019}00019 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{convolution_8h}{convolution.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00020}00020 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{sobel__edge__detection_8h}{sobel\_edge\_detection.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00021}00021 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{labeling_8h}{labeling.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00022}00022 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00023}00023 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00025}\mbox{\hyperlink{_segmentacija__slike_8c_a7efa5e9c7494c7d4586359300221aa5d}{00025}} \textcolor{keyword}{const} \textcolor{keywordtype}{char} * \mbox{\hyperlink{_segmentacija__slike_8c_a7efa5e9c7494c7d4586359300221aa5d}{filename}} = \textcolor{stringliteral}{"{}95x88.bmp"{}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00026}\mbox{\hyperlink{_segmentacija__slike_8c_a08e11421df4624386835415a364bae91}{00026}} \textcolor{keyword}{const} \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8c_a08e11421df4624386835415a364bae91}{uid}} = 999;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00027}\mbox{\hyperlink{read__write_8h_ae70c19442652fcd0849b8c426b96c594}{00027}} \mbox{\hyperlink{structrgb}{RGB}} \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[\mbox{\hyperlink{_segmentacija__slike_8h_a70ed59adcb4159ac551058053e649640}{SIZE}}] = \{ 0 \};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00032}\mbox{\hyperlink{_segmentacija__slike_8c_a1af3afeee4c4a45734f020b27409b3ef}{00032}} \textcolor{keywordtype}{void} \mbox{\hyperlink{_segmentacija__slike_8c_a1af3afeee4c4a45734f020b27409b3ef}{create\_colormap}}(\textcolor{keywordtype}{void}) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00033}00033     srand(time(0));}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00034}00034 \textcolor{preprocessor}{\#pragma SIMD\_for}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00035}00035     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < \mbox{\hyperlink{_segmentacija__slike_8h_a70ed59adcb4159ac551058053e649640}{SIZE}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00036}00036         \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].\mbox{\hyperlink{structrgb_ab60b5a519091320a0230516015baa5a8}{r}} = rand();}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00037}00037         \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].\mbox{\hyperlink{structrgb_a7f1378458a998351174a5e6201791909}{g}} = rand();}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00038}00038         \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].\mbox{\hyperlink{structrgb_a49c039bfb177536251e7fadaba4d4d11}{b}} = rand();}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00039}00039     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00040}00040 \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00043}00043 \textcolor{preprocessor}{\#ifdef GRAY\_1}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00048}00048 \textcolor{keyword}{static} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} to\_gray(\textcolor{keywordtype}{byte} * restrict \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00049}00049     \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} = 1;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00050}00050     \mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\_pix\_arr}} = (\textcolor{keywordtype}{byte} *) heap\_malloc(0, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00051}00051     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\_pix\_arr}} == NULL) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00052}00052         printf(\textcolor{stringliteral}{"{}Nije instancirana memorija\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00053}00053         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00054}00054     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00055}00055     \textcolor{keywordtype}{int} pix\_position;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00056}00056     \textcolor{keywordtype}{int} num\_iter = \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00057}00057     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < num\_iter; i++) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00058}00058         pix\_position = i * 3;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00059}00059         \textcolor{comment}{//                 -\/-\/-\/-\/-\/-\/RED-\/-\/-\/-\/-\/-\/-\/-\/                 -\/-\/-\/-\/-\/-\/-\/-\/GREEN-\/-\/-\/-\/-\/-\/-\/-\/               -\/-\/-\/-\/-\/-\/BLUE-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00060}00060         \mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\_pix\_arr}}[i] = (char) ((\textcolor{keywordtype}{float}) \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[pix\_position + 2] * 0.299}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00061}00061                 + (float) \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[pix\_position + 1] * 0.587}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00062}00062                 + (\textcolor{keywordtype}{float}) \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[pix\_position] * 0.114);}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00063}00063     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00064}00064 \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00065}00065 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00068}00068 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00069}00069 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00070}00070 \textcolor{preprocessor}{\#ifdef COLOR\_IMAGE\_NO\_OPT}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00079}\mbox{\hyperlink{_segmentacija__slike_8c_acfc529c45e603125285cea16d94d33d5}{00079}} \textcolor{keywordtype}{void} \mbox{\hyperlink{_segmentacija__slike_8c_acfc529c45e603125285cea16d94d33d5}{colorImage}}(\textcolor{keywordtype}{byte} * labeled\_im, \textcolor{keywordtype}{byte}* colored\_im, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} w, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} h) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00080}00080     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} num\_iter = w * h;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00081}00081     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} counter = 1;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00082}00082 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00083}00083     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < num\_iter; i++) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00084}00084         counter = i * 3;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00085}00085         \textcolor{comment}{//*((int*) (colored\_im + counter)) = colormap[labeled\_im[i]].number;}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00086}00086         colored\_im[counter] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_ab60b5a519091320a0230516015baa5a8}{r}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00087}00087         colored\_im[counter+1] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_a7f1378458a998351174a5e6201791909}{g}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00088}00088         colored\_im[counter+2] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_a49c039bfb177536251e7fadaba4d4d11}{b}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00089}00089     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00090}00090 \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00091}00091 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00092}00092 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00093}00093 \textcolor{preprocessor}{\#ifdef COLOR\_IMAGE\_PIPELINE}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00102}00102 \textcolor{keywordtype}{void} \mbox{\hyperlink{_segmentacija__slike_8c_acfc529c45e603125285cea16d94d33d5}{colorImage}}(\textcolor{keywordtype}{byte} * restrict labeled\_im, \textcolor{keywordtype}{byte}* restrict colored\_im, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} w, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} h) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00103}00103     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} num\_iter = w * h;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00104}00104     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} counter = 1;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00105}00105 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00106}00106     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < num\_iter; i++) \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00107}00107         counter = i * 3;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00108}00108         \textcolor{comment}{//*((int*) (colored\_im + counter)) = colormap[labeled\_im[i]].number;}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00109}00109         colored\_im[counter] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_ab60b5a519091320a0230516015baa5a8}{r}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00110}00110         colored\_im[counter+1] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_a7f1378458a998351174a5e6201791909}{g}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00111}00111         colored\_im[counter+2] = \mbox{\hyperlink{_segmentacija__slike_8c_ae70c19442652fcd0849b8c426b96c594}{colormap}}[labeled\_im[i]].\mbox{\hyperlink{structrgb_a49c039bfb177536251e7fadaba4d4d11}{b}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00112}00112     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00113}00113 \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00114}00114 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00115}00115 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00120}\mbox{\hyperlink{_segmentacija__slike_8c_ab253ce12c10cb94baac41d3a4cc0c45e}{00120}} \textcolor{keywordtype}{void} \mbox{\hyperlink{_segmentacija__slike_8c_ab253ce12c10cb94baac41d3a4cc0c45e}{InitSRU}}(\textcolor{keywordtype}{void})\{  \textcolor{comment}{//** LED01**//}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00121}00121         SRU(HIGH,DPI\_PBEN06\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00122}00122         SRU(FLAG4\_O,DPI\_PB06\_I);    \textcolor{comment}{//** LED02**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00123}00123         SRU(HIGH,DPI\_PBEN13\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00124}00124         SRU(FLAG5\_O,DPI\_PB13\_I);    \textcolor{comment}{//** LED03**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00125}00125         SRU(HIGH,DPI\_PBEN14\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00126}00126         SRU(FLAG6\_O,DPI\_PB14\_I);    \textcolor{comment}{//** LED04**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00127}00127         SRU(HIGH,DAI\_PBEN03\_I);}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00128}00128         SRU(HIGH,DAI\_PB03\_I);   \textcolor{comment}{//** LED05**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00129}00129         SRU(HIGH,DAI\_PBEN04\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00130}00130         SRU(HIGH,DAI\_PB04\_I);   \textcolor{comment}{//** LED06**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00131}00131         SRU(HIGH,DAI\_PBEN15\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00132}00132         SRU(HIGH,DAI\_PB15\_I);   \textcolor{comment}{//** LED07**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00133}00133         SRU(HIGH,DAI\_PBEN16\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00134}00134         SRU(HIGH,DAI\_PB16\_I);   \textcolor{comment}{//** LED08**//  }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00135}00135         SRU(HIGH,DAI\_PBEN17\_I); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00136}00136         SRU(HIGH,DAI\_PB17\_I);   \textcolor{comment}{//Setting flag pins as outputs}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00137}00137         sysreg\_bit\_set(sysreg\_FLAGS, (FLG4O|FLG5O|FLG6O) ); \textcolor{comment}{//Setting HIGH to flag pins }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00138}00138         sysreg\_bit\_set(sysreg\_FLAGS, (FLG4|FLG5|FLG6) );}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00139}00139     \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00143}\mbox{\hyperlink{_segmentacija__slike_8c_adfedb1137950a6adb968961333905bdf}{00143}} \textcolor{keywordtype}{char} \mbox{\hyperlink{_segmentacija__slike_8c_adfedb1137950a6adb968961333905bdf}{\_\_argv\_string}}[] = \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00144}00144 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00145}\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{00145}} cycle\_t \mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00146}\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{00146}} cycle\_t \mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00147}\mbox{\hyperlink{_segmentacija__slike_8c_ade3dc632a015ff6b95d99aafd76a004c}{00147}} cycle\_t \mbox{\hyperlink{_segmentacija__slike_8c_ade3dc632a015ff6b95d99aafd76a004c}{program\_start}};}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00148}00148 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00149}\mbox{\hyperlink{_segmentacija__slike_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{00149}} \textcolor{keywordtype}{int} \mbox{\hyperlink{_segmentacija__slike_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}() \{}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00155}00155     adi\_initComponents();}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00156}00156 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00157}00157     \mbox{\hyperlink{_segmentacija__slike_8c_ab253ce12c10cb94baac41d3a4cc0c45e}{InitSRU}}();   \textcolor{comment}{//turn off LEDs }}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00158}00158     sysreg\_bit\_clr(sysreg\_FLAGS, FLG4); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00159}00159     sysreg\_bit\_clr(sysreg\_FLAGS, FLG5); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00160}00160     sysreg\_bit\_clr(sysreg\_FLAGS, FLG6); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00161}00161     SRU(LOW,DAI\_PB03\_I);    }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00162}00162     SRU(LOW,DAI\_PB04\_I);    }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00163}00163     SRU(LOW,DAI\_PB15\_I);    }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00164}00164     SRU(LOW,DAI\_PB16\_I);    }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00165}00165     SRU(LOW,DAI\_PB17\_I);}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00166}00166 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00167}00167 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00168}00168     \textcolor{comment}{// reading Image into pixels}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00169}00169     sysreg\_bit\_set(sysreg\_FLAGS, FLG4); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00170}00170     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_ade3dc632a015ff6b95d99aafd76a004c}{program\_start}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00171}00171     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00172}00172     \mbox{\hyperlink{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}{ReadImage}}(\mbox{\hyperlink{_segmentacija__slike_8c_a7efa5e9c7494c7d4586359300221aa5d}{filename}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00173}00173     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00174}00174     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa za citanje: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00175}00175 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00176}00176     \textcolor{comment}{//WriteImage("{}lb"{}, pixels, COLORED);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00177}00177 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00178}00178     \textcolor{comment}{//converting to gray}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00179}00179     }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00180}00180     sysreg\_bit\_set(sysreg\_FLAGS, FLG5); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00181}00181     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00182}00182     to\_gray(\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00183}00183     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00184}00184     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa za grayscale: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00185}00185 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00186}00186     \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{WriteImage}}(\textcolor{stringliteral}{"{}Gray"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\_pix\_arr}}, \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00187}00187 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00188}00188     \textcolor{comment}{// detecting edges}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00189}00189     sysreg\_bit\_set(sysreg\_FLAGS, FLG6); }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00190}00190         }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00191}00191     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00192}00192     \mbox{\hyperlink{sobel__edge__detection_8c_a2cf87a51a2a0a73ca3f69f6fc82fa118}{sobel\_edge\_detector}}(\mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\_pix\_arr}}, \&\mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\_pix\_array}}, \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00193}00193     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00194}00194     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa za detekciju ivica: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00195}00195 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00196}00196     \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{WriteImage}}(\textcolor{stringliteral}{"{}Edged"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\_pix\_array}}, \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00197}00197     \textcolor{comment}{//labeling-\/-\/-\/-\/coding image}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00198}00198     SRU(HIGH,DAI\_PB03\_I);   }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00199}00199     }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00200}00200     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00201}00201     \mbox{\hyperlink{labeling_8c_a03d89fc84527beaeeb9f93effda6c3dc}{labeling}}(\mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\_pix\_array}}, \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00202}00202     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00203}00203     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa za kodovanje slike: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00204}00204 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00205}00205     }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00206}00206     SRU(HIGH,DAI\_PB04\_I);   }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00207}00207     \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{WriteImage}}(\textcolor{stringliteral}{"{}Coded"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\_pix\_array}}, \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00208}00208     START\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00209}00209     \mbox{\hyperlink{_segmentacija__slike_8c_a1af3afeee4c4a45734f020b27409b3ef}{create\_colormap}}();}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00210}00210     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_a40e2211b1305df2549b727c2ae7e1e70}{start\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00211}00211     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa za kreiranje palete boja: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00212}00212 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00213}00213     \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{WriteImage}}(\textcolor{stringliteral}{"{}Out\_NEW"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\_pix\_array}}, \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a7dbe5ec7ff7b98b9d96ad82268fd85e9}{CODED}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00214}00214 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00215}00215     }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00216}00216     \textcolor{comment}{//OVERKILL...}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00217}00217 \textcolor{comment}{//  SRU(HIGH,DAI\_PB15\_I);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00218}00218 \textcolor{comment}{//  START\_CYCLE\_COUNT(start\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00219}00219 \textcolor{comment}{//  colorImage(edged\_pix\_array, pixels, width, height);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00220}00220 \textcolor{comment}{//  STOP\_CYCLE\_COUNT(final\_count,start\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00221}00221 \textcolor{comment}{//  PRINT\_CYCLES("{}Broj ciklusa za bojenje slike: "{},final\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00222}00222 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00223}00223 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00224}00224 \textcolor{comment}{//  //writing image to file}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00225}00225 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00226}00226 \textcolor{comment}{//  SRU(HIGH,DAI\_PB16\_I);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00227}00227 \textcolor{comment}{//  START\_CYCLE\_COUNT(start\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00228}00228 \textcolor{comment}{//  WriteImage("{}Out"{}, pixels, COLORED);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00229}00229 \textcolor{comment}{//  STOP\_CYCLE\_COUNT(final\_count,start\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00230}00230 \textcolor{comment}{//  PRINT\_CYCLES("{}Broj ciklusa za cuvanje slike:  "{},final\_count);}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00231}00231 }
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00232}00232     STOP\_CYCLE\_COUNT(\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}},\mbox{\hyperlink{_segmentacija__slike_8c_ade3dc632a015ff6b95d99aafd76a004c}{program\_start}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00233}00233     PRINT\_CYCLES(\textcolor{stringliteral}{"{}Broj ciklusa citav program: "{}},\mbox{\hyperlink{_segmentacija__slike_8c_a6136769cc7a923e90c7f4073e097ad50}{final\_count}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00234}00234     \textcolor{comment}{// freeing memory}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00235}00235     heap\_free(0,\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}});}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00236}00236     SRU(HIGH,DAI\_PB17\_I);}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00237}00237     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00238}00238 \}}
+\DoxyCodeLine{\Hypertarget{_segmentacija__slike_8c_source_l00239}00239 }
+
+\end{DoxyCode}

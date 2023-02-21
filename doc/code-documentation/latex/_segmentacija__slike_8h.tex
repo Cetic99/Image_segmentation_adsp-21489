@@ -1,2 +1,393 @@
 \hypertarget{_segmentacija__slike_8h}{}\doxysection{src/\+Segmentacija\+\_\+slike.h File Reference}
 \label{_segmentacija__slike_8h}\index{src/Segmentacija\_slike.h@{src/Segmentacija\_slike.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$limits.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$cycle\+\_\+count.\+h$>$}\newline
+{\ttfamily \#include $<$def21489.\+h$>$}\newline
+{\ttfamily \#include $<$sru21489.\+h$>$}\newline
+{\ttfamily \#include $<$SYSREG.\+h$>$}\newline
+{\ttfamily \#include $<$21489.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structrgb}{rgb}}
+\begin{DoxyCompactList}\small\item\em Used for keeping colormap. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_ae1f3b80657b0de6c597f3c4b188f4088}{EDGE\+\_\+\+VAL}}~0
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a7efe7584da800d59c00f2d6119abf66b}{NUM\+\_\+\+LABELS}}~50000
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a4833cb5d6c5e497d501f52946ff33ed9}{READ\+\_\+1}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_aeea17ce07a82580e48f35851548fe25b}{WRITE\+\_\+1}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a0eb35b3b0eac5bbc5aee9476be7d62f2}{GRAY\+\_\+1}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_aba11e980e645e0624718c5fadac78203}{CONVOLUTION\+\_\+\+PRAGMA\+\_\+\+INLINE}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a6ba1c2c8bf26eac6bac59007f754e5bb}{NORMALIZATION\+\_\+\+HARDWARE}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_ac243bfa96aa2c28014159ff098bd2324}{EDGE}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a01d370d7566f4983c777821e883569df}{LABELING\+\_\+\+V2\+\_\+\+EXPECTED}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a59942a10f82abaac392817c81766cd65}{COLOR\+\_\+\+IMAGE\+\_\+\+NO\+\_\+\+OPT}}
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}{H}}~88
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a649b8f01fd6c0f47ff3cbddaeba63bfb}{W}}~95
+\item 
+\#define \mbox{\hyperlink{_segmentacija__slike_8h_a70ed59adcb4159ac551058053e649640}{SIZE}}~256
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef unsigned int \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}}
+\item 
+typedef signed int \mbox{\hyperlink{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}{int32}}
+\item 
+typedef short \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}}
+\item 
+typedef unsigned char \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}
+\item 
+typedef struct \mbox{\hyperlink{structrgb}{rgb}} \mbox{\hyperlink{_segmentacija__slike_8h_a3c1b4ad27ba7adddbd8cf64a20c0ec9d}{RGB}}
+\begin{DoxyCompactList}\small\item\em Used for keeping colormap. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_segmentacija__slike_8h_a1af3afeee4c4a45734f020b27409b3ef}{create\+\_\+colormap}} (void)
+\begin{DoxyCompactList}\small\item\em Create a colormap object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_segmentacija__slike_8h_a2284131b1032a249bbfc730d5e362014}{to\+\_\+gray}} (\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$restrict \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}})
+\begin{DoxyCompactList}\small\item\em Conversion to Grayscale image. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a08e11421df4624386835415a364bae91}{uid}}
+\item 
+int \mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\+\_\+pixels\+\_\+3b}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$ \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$ \mbox{\hyperlink{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}{gray\+\_\+pix\+\_\+arr}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$ \mbox{\hyperlink{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}{edged\+\_\+pix\+\_\+array}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}
+\item 
+\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytes\+Per\+Pixel}}
+\item 
+const char $\ast$ \mbox{\hyperlink{_segmentacija__slike_8h_a7efa5e9c7494c7d4586359300221aa5d}{filename}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_segmentacija__slike_8h_a59942a10f82abaac392817c81766cd65}\label{_segmentacija__slike_8h_a59942a10f82abaac392817c81766cd65}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!COLOR\_IMAGE\_NO\_OPT@{COLOR\_IMAGE\_NO\_OPT}}
+\index{COLOR\_IMAGE\_NO\_OPT@{COLOR\_IMAGE\_NO\_OPT}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{COLOR\_IMAGE\_NO\_OPT}{COLOR\_IMAGE\_NO\_OPT}}
+{\footnotesize\ttfamily \#define COLOR\+\_\+\+IMAGE\+\_\+\+NO\+\_\+\+OPT}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00067}{67}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_aba11e980e645e0624718c5fadac78203}\label{_segmentacija__slike_8h_aba11e980e645e0624718c5fadac78203}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!CONVOLUTION\_PRAGMA\_INLINE@{CONVOLUTION\_PRAGMA\_INLINE}}
+\index{CONVOLUTION\_PRAGMA\_INLINE@{CONVOLUTION\_PRAGMA\_INLINE}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{CONVOLUTION\_PRAGMA\_INLINE}{CONVOLUTION\_PRAGMA\_INLINE}}
+{\footnotesize\ttfamily \#define CONVOLUTION\+\_\+\+PRAGMA\+\_\+\+INLINE}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00063}{63}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_ac243bfa96aa2c28014159ff098bd2324}\label{_segmentacija__slike_8h_ac243bfa96aa2c28014159ff098bd2324}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!EDGE@{EDGE}}
+\index{EDGE@{EDGE}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{EDGE}{EDGE}}
+{\footnotesize\ttfamily \#define EDGE}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00065}{65}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_ae1f3b80657b0de6c597f3c4b188f4088}\label{_segmentacija__slike_8h_ae1f3b80657b0de6c597f3c4b188f4088}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!EDGE\_VAL@{EDGE\_VAL}}
+\index{EDGE\_VAL@{EDGE\_VAL}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{EDGE\_VAL}{EDGE\_VAL}}
+{\footnotesize\ttfamily \#define EDGE\+\_\+\+VAL~0}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00020}{20}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a0eb35b3b0eac5bbc5aee9476be7d62f2}\label{_segmentacija__slike_8h_a0eb35b3b0eac5bbc5aee9476be7d62f2}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!GRAY\_1@{GRAY\_1}}
+\index{GRAY\_1@{GRAY\_1}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{GRAY\_1}{GRAY\_1}}
+{\footnotesize\ttfamily \#define GRAY\+\_\+1}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00062}{62}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}\label{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!H@{H}}
+\index{H@{H}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{H}{H}}
+{\footnotesize\ttfamily \#define H~88}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00117}{117}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a01d370d7566f4983c777821e883569df}\label{_segmentacija__slike_8h_a01d370d7566f4983c777821e883569df}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!LABELING\_V2\_EXPECTED@{LABELING\_V2\_EXPECTED}}
+\index{LABELING\_V2\_EXPECTED@{LABELING\_V2\_EXPECTED}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{LABELING\_V2\_EXPECTED}{LABELING\_V2\_EXPECTED}}
+{\footnotesize\ttfamily \#define LABELING\+\_\+\+V2\+\_\+\+EXPECTED}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00066}{66}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a6ba1c2c8bf26eac6bac59007f754e5bb}\label{_segmentacija__slike_8h_a6ba1c2c8bf26eac6bac59007f754e5bb}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!NORMALIZATION\_HARDWARE@{NORMALIZATION\_HARDWARE}}
+\index{NORMALIZATION\_HARDWARE@{NORMALIZATION\_HARDWARE}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{NORMALIZATION\_HARDWARE}{NORMALIZATION\_HARDWARE}}
+{\footnotesize\ttfamily \#define NORMALIZATION\+\_\+\+HARDWARE}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00064}{64}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a7efe7584da800d59c00f2d6119abf66b}\label{_segmentacija__slike_8h_a7efe7584da800d59c00f2d6119abf66b}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!NUM\_LABELS@{NUM\_LABELS}}
+\index{NUM\_LABELS@{NUM\_LABELS}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{NUM\_LABELS}{NUM\_LABELS}}
+{\footnotesize\ttfamily \#define NUM\+\_\+\+LABELS~50000}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00021}{21}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a4833cb5d6c5e497d501f52946ff33ed9}\label{_segmentacija__slike_8h_a4833cb5d6c5e497d501f52946ff33ed9}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!READ\_1@{READ\_1}}
+\index{READ\_1@{READ\_1}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{READ\_1}{READ\_1}}
+{\footnotesize\ttfamily \#define READ\+\_\+1}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00060}{60}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a70ed59adcb4159ac551058053e649640}\label{_segmentacija__slike_8h_a70ed59adcb4159ac551058053e649640}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!SIZE@{SIZE}}
+\index{SIZE@{SIZE}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{SIZE}{SIZE}}
+{\footnotesize\ttfamily \#define SIZE~256}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00121}{121}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a649b8f01fd6c0f47ff3cbddaeba63bfb}\label{_segmentacija__slike_8h_a649b8f01fd6c0f47ff3cbddaeba63bfb}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!W@{W}}
+\index{W@{W}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{W}{W}}
+{\footnotesize\ttfamily \#define W~95}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00118}{118}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_aeea17ce07a82580e48f35851548fe25b}\label{_segmentacija__slike_8h_aeea17ce07a82580e48f35851548fe25b}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!WRITE\_1@{WRITE\_1}}
+\index{WRITE\_1@{WRITE\_1}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{WRITE\_1}{WRITE\_1}}
+{\footnotesize\ttfamily \#define WRITE\+\_\+1}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00061}{61}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}\label{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!byte@{byte}}
+\index{byte@{byte}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{byte}{byte}}
+{\footnotesize\ttfamily typedef unsigned char \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00027}{27}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}\label{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!int16@{int16}}
+\index{int16@{int16}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{int16}{int16}}
+{\footnotesize\ttfamily typedef short \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00026}{26}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}\label{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!int32@{int32}}
+\index{int32@{int32}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{int32}{int32}}
+{\footnotesize\ttfamily typedef signed int \mbox{\hyperlink{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}{int32}}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00025}{25}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a3c1b4ad27ba7adddbd8cf64a20c0ec9d}\label{_segmentacija__slike_8h_a3c1b4ad27ba7adddbd8cf64a20c0ec9d}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!RGB@{RGB}}
+\index{RGB@{RGB}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{RGB}{RGB}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structrgb}{rgb}} \mbox{\hyperlink{_segmentacija__slike_8h_a3c1b4ad27ba7adddbd8cf64a20c0ec9d}{RGB}}}
+
+
+
+Used for keeping colormap. 
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}\label{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!uint32@{uint32}}
+\index{uint32@{uint32}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{uint32}{uint32}}
+{\footnotesize\ttfamily typedef unsigned int \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00024}{24}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_segmentacija__slike_8h_a1af3afeee4c4a45734f020b27409b3ef}\label{_segmentacija__slike_8h_a1af3afeee4c4a45734f020b27409b3ef}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!create\_colormap@{create\_colormap}}
+\index{create\_colormap@{create\_colormap}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{create\_colormap()}{create\_colormap()}}
+{\footnotesize\ttfamily void create\+\_\+colormap (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Create a colormap object. 
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8c_source_l00032}{32}} of file \mbox{\hyperlink{_segmentacija__slike_8c_source}{Segmentacija\+\_\+slike.\+c}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a2284131b1032a249bbfc730d5e362014}\label{_segmentacija__slike_8h_a2284131b1032a249bbfc730d5e362014}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!to\_gray@{to\_gray}}
+\index{to\_gray@{to\_gray}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{to\_gray()}{to\_gray()}}
+{\footnotesize\ttfamily void to\+\_\+gray (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$restrict}]{pixels }\end{DoxyParamCaption})}
+
+
+
+Conversion to Grayscale image. 
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}\label{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!bytesPerPixel@{bytesPerPixel}}
+\index{bytesPerPixel@{bytesPerPixel}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{bytesPerPixel}{bytesPerPixel}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} bytes\+Per\+Pixel}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00045}{45}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}\label{_segmentacija__slike_8h_aa3cfd87cc664fccbb898f0406654c528}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!edged\_pix\_array@{edged\_pix\_array}}
+\index{edged\_pix\_array@{edged\_pix\_array}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{edged\_pix\_array}{edged\_pix\_array}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}$\ast$ edged\+\_\+pix\+\_\+array}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00042}{42}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a7efa5e9c7494c7d4586359300221aa5d}\label{_segmentacija__slike_8h_a7efa5e9c7494c7d4586359300221aa5d}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!filename@{filename}}
+\index{filename@{filename}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{filename}{filename}}
+{\footnotesize\ttfamily const char$\ast$ filename\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8c_source_l00025}{25}} of file \mbox{\hyperlink{_segmentacija__slike_8c_source}{Segmentacija\+\_\+slike.\+c}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}\label{_segmentacija__slike_8h_a2f1b559c4583be976176404ac8dc8c3d}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!gray\_pix\_arr@{gray\_pix\_arr}}
+\index{gray\_pix\_arr@{gray\_pix\_arr}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{gray\_pix\_arr}{gray\_pix\_arr}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}$\ast$ gray\+\_\+pix\+\_\+arr}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00041}{41}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}\label{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!height@{height}}
+\index{height@{height}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{height}{height}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} height}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00044}{44}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}\label{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!index\_pixels\_3b@{index\_pixels\_3b}}
+\index{index\_pixels\_3b@{index\_pixels\_3b}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{index\_pixels\_3b}{index\_pixels\_3b}}
+{\footnotesize\ttfamily int index\+\_\+pixels\+\_\+3b}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00034}{34}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}\label{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!pixels@{pixels}}
+\index{pixels@{pixels}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{pixels}{pixels}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}$\ast$ pixels}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00040}{40}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a08e11421df4624386835415a364bae91}\label{_segmentacija__slike_8h_a08e11421df4624386835415a364bae91}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!uid@{uid}}
+\index{uid@{uid}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{uid}{uid}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} uid\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8c_source_l00026}{26}} of file \mbox{\hyperlink{_segmentacija__slike_8c_source}{Segmentacija\+\_\+slike.\+c}}.
+
+\mbox{\Hypertarget{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}\label{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}} 
+\index{Segmentacija\_slike.h@{Segmentacija\_slike.h}!width@{width}}
+\index{width@{width}!Segmentacija\_slike.h@{Segmentacija\_slike.h}}
+\doxysubsubsection{\texorpdfstring{width}{width}}
+{\footnotesize\ttfamily \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} width}
+
+
+
+Definition at line \mbox{\hyperlink{_segmentacija__slike_8h_source_l00043}{43}} of file \mbox{\hyperlink{_segmentacija__slike_8h_source}{Segmentacija\+\_\+slike.\+h}}.
+

@@ -1,7 +1,7 @@
 /**
  * @file Segmentacija_slike.c
- * @author Nikola Cetić (nikolacetic8@gmail.com)
- * @brief This file contains everything that is needed for image segmentation
+ * @author Nikola Cetic (nikolacetic8@gmail.com)
+ * @brief This file contains main, grayscale, and color_image function
  * @version 0.1
  * @date 2023-02-11
  * 
@@ -22,8 +22,21 @@
 
 
 
-const char * filename = "95x88.bmp";
+const char * filename = "100x100.bmp";
+
 const uint32 uid = 999;
+byte pixels_3b[45001];
+int index_pixels_3b;
+
+/*-------------------VARIABLE DECLARATION-----------------*/
+byte *pixels;
+byte *gray_pix_arr;
+byte *edged_pix_array;
+uint32 width;
+uint32 height;
+uint32 bytesPerPixel;
+/*========================================================*/
+
 RGB colormap[SIZE] = { 0 };
 /**
  * @brief Create a colormap object
@@ -31,7 +44,6 @@ RGB colormap[SIZE] = { 0 };
  */
 void create_colormap(void) {
 	srand(time(0));
-#pragma SIMD_for
 	for (int i = 1; i < SIZE; i++) {
 		colormap[i].r = rand();
 		colormap[i].g = rand();
@@ -45,7 +57,8 @@ void create_colormap(void) {
  * @brief Conversion to Grayscale image
  * 
  */
-static inline void to_gray(byte * restrict pixels) {
+#pragma inline
+static void to_gray(byte * restrict pixels) {
 	bytesPerPixel = 1;
 	gray_pix_arr = (byte *) heap_malloc(0, height * width);
 	if (gray_pix_arr == NULL) {
@@ -165,7 +178,7 @@ int main() {
 	SRU(LOW,DAI_PB17_I);
 
 
-	// reading Image into pixels
+	/* reading Image into pixels*/
 	sysreg_bit_set(sysreg_FLAGS, FLG4);	
 	START_CYCLE_COUNT(program_start);
 	START_CYCLE_COUNT(start_count);
@@ -173,9 +186,7 @@ int main() {
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za citanje: ",final_count);
 
-	//WriteImage("lb", pixels, COLORED);
-
-	//converting to gray
+	/*converting to gray*/
 	
 	sysreg_bit_set(sysreg_FLAGS, FLG5);	
 	START_CYCLE_COUNT(start_count);
@@ -185,7 +196,7 @@ int main() {
 
 	WriteImage("Gray", gray_pix_arr, GRAY);
 
-	// detecting edges
+	/* detecting edges*/
 	sysreg_bit_set(sysreg_FLAGS, FLG6);	
 		
 	START_CYCLE_COUNT(start_count);
@@ -194,7 +205,7 @@ int main() {
 	PRINT_CYCLES("Broj ciklusa za detekciju ivica: ",final_count);
 
 	WriteImage("Edged", edged_pix_array, GRAY);
-	//labeling----coding image
+	/*labeling----coding image*/
 	SRU(HIGH,DAI_PB03_I);	
 	
 	START_CYCLE_COUNT(start_count);
@@ -203,6 +214,7 @@ int main() {
 	PRINT_CYCLES("Broj ciklusa za kodovanje slike: ",final_count);
 
 	
+	/* creating colormap */
 	SRU(HIGH,DAI_PB04_I);	
 	WriteImage("Coded", edged_pix_array, GRAY);
 	START_CYCLE_COUNT(start_count);
@@ -210,8 +222,12 @@ int main() {
 	STOP_CYCLE_COUNT(final_count,start_count);
 	PRINT_CYCLES("Broj ciklusa za kreiranje palete boja: ",final_count);
 
+	/* saving image on pc */
+	SRU(HIGH,DAI_PB15_I);
+	START_CYCLE_COUNT(start_count);
 	WriteImage("Out_NEW", edged_pix_array, CODED);
-
+	STOP_CYCLE_COUNT(final_count,start_count);
+	PRINT_CYCLES("Broj ciklusa za cuvanje slike na racunar: ",final_count);
 	
 	//OVERKILL...
 //	SRU(HIGH,DAI_PB15_I);
@@ -232,7 +248,7 @@ int main() {
 	STOP_CYCLE_COUNT(final_count,program_start);
 	PRINT_CYCLES("Broj ciklusa citav program: ",final_count);
 	// freeing memory
-	heap_free(0,pixels);
+	heap_free(0,edged_pix_array);
 	SRU(HIGH,DAI_PB17_I);
 	return 0;
 }

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Image Segmentation: src/Segmentacija_slike.h Source File</title>
+<title>Image_Segmentation: src/Segmentacija_slike.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Image Segmentation
+   <div id="projectname">Image_Segmentation
    </div>
   </td>
  </tr>
@@ -84,8 +84,148 @@ $(function() {
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define __SEGMENTACIJA_SLIKE_H__</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">/* Add your custom header content here */</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#endif </span><span class="comment">/* __SEGMENTACIJA_SLIKE_H__ */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;math.h&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;limits.h&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;time.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;cycle_count.h&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;def21489.h&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &lt;sru21489.h&gt;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;SYSREG.h&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;21489.h&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#ae1f3b80657b0de6c597f3c4b188f4088">   20</a></span><span class="preprocessor">#define EDGE_VAL                0</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a7efe7584da800d59c00f2d6119abf66b">   21</a></span><span class="preprocessor">#define NUM_LABELS              50000</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">//---------------------TYPES DEFINITION-------------------</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">   24</a></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a>;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a43d43196463bde49cb067f5c20ab8481">   25</a></span><span class="keyword">typedef</span> <span class="keywordtype">signed</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a43d43196463bde49cb067f5c20ab8481">int32</a>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a4355d16fcf9f644c9ac84293f0b1801f">   26</a></span><span class="keyword">typedef</span> <span class="keywordtype">short</span> <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a4355d16fcf9f644c9ac84293f0b1801f">int16</a>;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a0c8186d9b9b7880309c27230bbb5e69d">   27</a></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a0c8186d9b9b7880309c27230bbb5e69d">byte</a>;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">//========================================================</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">//-----------------MEMORY MAPPING SECTIONS----------------</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a> <a class="code hl_variable" href="_segmentacija__slike_8h.html#a08e11421df4624386835415a364bae91">uid</a>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#pragma section(&quot;pixels_3b&quot;</span>)</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">static</span> <span class="keywordtype">byte</span> pixels_3b[45001];</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#aed8d116285a438e0f68b7fe0cbf64275">   34</a></span><span class="keywordtype">int</span> <a class="code hl_variable" href="_segmentacija__slike_8h.html#aed8d116285a438e0f68b7fe0cbf64275">index_pixels_3b</a>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">//========================================================</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">//-------------------VARIABLE DECLARATION-----------------</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#ae4be7110f537193162323b8caf132a7c">   40</a></span><span class="keywordtype">byte</span> *<a class="code hl_variable" href="_segmentacija__slike_8h.html#ae4be7110f537193162323b8caf132a7c">pixels</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a2f1b559c4583be976176404ac8dc8c3d">   41</a></span><span class="keywordtype">byte</span> *<a class="code hl_variable" href="_segmentacija__slike_8h.html#a2f1b559c4583be976176404ac8dc8c3d">gray_pix_arr</a>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#aa3cfd87cc664fccbb898f0406654c528">   42</a></span><span class="keywordtype">byte</span> *<a class="code hl_variable" href="_segmentacija__slike_8h.html#aa3cfd87cc664fccbb898f0406654c528">edged_pix_array</a>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a9ddae86018522bf2d708066884d89b3c">   43</a></span><a class="code hl_typedef" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a> <a class="code hl_variable" href="_segmentacija__slike_8h.html#a9ddae86018522bf2d708066884d89b3c">width</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#ad6796376ef5cc027ed35c4b2dd170f41">   44</a></span><a class="code hl_typedef" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a> <a class="code hl_variable" href="_segmentacija__slike_8h.html#ad6796376ef5cc027ed35c4b2dd170f41">height</a>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a180b9d9e87ce370141d8c112fe62895d">   45</a></span><a class="code hl_typedef" href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a> <a class="code hl_variable" href="_segmentacija__slike_8h.html#a180b9d9e87ce370141d8c112fe62895d">bytesPerPixel</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">//========================================================</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">//#define READ_1 ||KNOWN_IMAGE_SIZE_READ</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">//#define WRITE_1</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment">//#define GRAY_1</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">//#define CONVOLUTION_NO_OPT || CONVOLUTION_UNROLL || CONVOLUTION_PRAGMA || CONVOLUTION_UNROLL_INLINE || CONVOLUTION_PRAGMA_INLINE</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">//#define NORMALIZATION_NO_OPT || NORMALIZATION_HARDWARE || KNOWN_IMAGE_SIZE_NORMALIZATION</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">//#define EDGE || KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">//#define LABELING_V1 || LABELING_V2 || LABELING_V2_EXPECTED || KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">//-----------------------COMPILING------------------------</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * <a class="code hl_variable" href="_segmentacija__slike_8h.html#a7efa5e9c7494c7d4586359300221aa5d">filename</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">//NO OPTIMIZATION</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a4833cb5d6c5e497d501f52946ff33ed9">   60</a></span><span class="preprocessor">#define READ_1</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#aeea17ce07a82580e48f35851548fe25b">   61</a></span><span class="preprocessor">#define WRITE_1</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a0eb35b3b0eac5bbc5aee9476be7d62f2">   62</a></span><span class="preprocessor">#define GRAY_1</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#aba11e980e645e0624718c5fadac78203">   63</a></span><span class="preprocessor">#define CONVOLUTION_PRAGMA_INLINE</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a6ba1c2c8bf26eac6bac59007f754e5bb">   64</a></span><span class="preprocessor">#define NORMALIZATION_HARDWARE</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#ac243bfa96aa2c28014159ff098bd2324">   65</a></span><span class="preprocessor">#define EDGE</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a01d370d7566f4983c777821e883569df">   66</a></span><span class="preprocessor">#define LABELING_V2_EXPECTED</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a59942a10f82abaac392817c81766cd65">   67</a></span><span class="preprocessor">#define COLOR_IMAGE_NO_OPT</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">// //OPTIMIZED LABELING FUNCTION</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">// #define READ_1</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">// #define WRITE_1</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">// #define GRAY_1</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">// #define CONVOLUTION_NO_OPT</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">// #define NORMALIZATION_PRAGMA</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">// #define EDGE_NO_OPT</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">// #define LABELING_V2</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment">// #define COLOR_IMAGE_NO_OPT</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">// //OPTIMIZED CONVOLUTION FUNCTION</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">// #define READ_1</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">// #define WRITE_1</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">// #define GRAY_1</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">// #define CONVOLUTION_UNROLL</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">// #define NORMALIZATION_PRAGMA</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">// #define EDGE_NO_OPT</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">// #define LABELING_V2</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">// #define COLOR_IMAGE_NO_OPT</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">// //OPTIMIZED CONVOLUTION FUNCTION INLINE</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">// #define READ_1</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// #define WRITE_1</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">// #define GRAY_1</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">// #define CONVOLUTION_UNROLL_INLINE</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">// #define NORMALIZATION_PRAGMA</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">// #define EDGE_NO_OPT</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">// #define LABELING_V2</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">// #define COLOR_IMAGE_NO_OPT</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">//KNOWN IMAGE SIZE</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">// #define KNOWN_IMAGE_SIZE_READ</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">// #define GRAY_PIPELINE</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">// #define CONVOLUTION_UNROLL_INLINE_PIPELINE</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">// #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">// #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">// #define KNOWN_IMAGE_SIZE_NORMALIZATION</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">// #define WRITE_1</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">// #define COLOR_IMAGE_PIPELINE</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">//========================================================</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">//--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#abec92cc72a096640b821b8cd56a02495">  117</a></span><span class="preprocessor">#define H 88</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a649b8f01fd6c0f47ff3cbddaeba63bfb">  118</a></span><span class="preprocessor">#define W 95</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">//========================================================</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a70ed59adcb4159ac551058053e649640">  121</a></span><span class="preprocessor">#define SIZE 256</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="structrgb.html">  126</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structrgb.html">rgb</a> {</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="structrgb.html#a49c039bfb177536251e7fadaba4d4d11">  127</a></span>    <span class="keywordtype">byte</span> <a class="code hl_variable" href="structrgb.html#ab60b5a519091320a0230516015baa5a8">r</a>, <a class="code hl_variable" href="structrgb.html#a7f1378458a998351174a5e6201791909">g</a>, <a class="code hl_variable" href="structrgb.html#a49c039bfb177536251e7fadaba4d4d11">b</a>;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a3c1b4ad27ba7adddbd8cf64a20c0ec9d">  128</a></span>} <a class="code hl_typedef" href="_segmentacija__slike_8h.html#a3c1b4ad27ba7adddbd8cf64a20c0ec9d">RGB</a>;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="keywordtype">void</span> <a class="code hl_function" href="_segmentacija__slike_8h.html#a1af3afeee4c4a45734f020b27409b3ef">create_colormap</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="_segmentacija__slike_8h.html#a2284131b1032a249bbfc730d5e362014">  140</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="_segmentacija__slike_8h.html#a2284131b1032a249bbfc730d5e362014">to_gray</a>(<span class="keywordtype">byte</span> * restrict <a class="code hl_variable" href="_segmentacija__slike_8h.html#ae4be7110f537193162323b8caf132a7c">pixels</a>);</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">#endif </span><span class="comment">/* __SEGMENTACIJA_SLIKE_H__ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a08e11421df4624386835415a364bae91"><div class="ttname"><a href="_segmentacija__slike_8h.html#a08e11421df4624386835415a364bae91">uid</a></div><div class="ttdeci">const uint32 uid</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8c_source.html#l00026">Segmentacija_slike.c:26</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a0c8186d9b9b7880309c27230bbb5e69d"><div class="ttname"><a href="_segmentacija__slike_8h.html#a0c8186d9b9b7880309c27230bbb5e69d">byte</a></div><div class="ttdeci">unsigned char byte</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00027">Segmentacija_slike.h:27</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a1134b580f8da4de94ca6b1de4d37975e"><div class="ttname"><a href="_segmentacija__slike_8h.html#a1134b580f8da4de94ca6b1de4d37975e">uint32</a></div><div class="ttdeci">unsigned int uint32</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00024">Segmentacija_slike.h:24</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a180b9d9e87ce370141d8c112fe62895d"><div class="ttname"><a href="_segmentacija__slike_8h.html#a180b9d9e87ce370141d8c112fe62895d">bytesPerPixel</a></div><div class="ttdeci">uint32 bytesPerPixel</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00045">Segmentacija_slike.h:45</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a1af3afeee4c4a45734f020b27409b3ef"><div class="ttname"><a href="_segmentacija__slike_8h.html#a1af3afeee4c4a45734f020b27409b3ef">create_colormap</a></div><div class="ttdeci">void create_colormap(void)</div><div class="ttdoc">Create a colormap object.</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8c_source.html#l00032">Segmentacija_slike.c:32</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a2284131b1032a249bbfc730d5e362014"><div class="ttname"><a href="_segmentacija__slike_8h.html#a2284131b1032a249bbfc730d5e362014">to_gray</a></div><div class="ttdeci">void to_gray(byte *restrict pixels)</div><div class="ttdoc">Conversion to Grayscale image.</div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a2f1b559c4583be976176404ac8dc8c3d"><div class="ttname"><a href="_segmentacija__slike_8h.html#a2f1b559c4583be976176404ac8dc8c3d">gray_pix_arr</a></div><div class="ttdeci">byte * gray_pix_arr</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00041">Segmentacija_slike.h:41</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a3c1b4ad27ba7adddbd8cf64a20c0ec9d"><div class="ttname"><a href="_segmentacija__slike_8h.html#a3c1b4ad27ba7adddbd8cf64a20c0ec9d">RGB</a></div><div class="ttdeci">struct rgb RGB</div><div class="ttdoc">Used for keeping colormap.</div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a4355d16fcf9f644c9ac84293f0b1801f"><div class="ttname"><a href="_segmentacija__slike_8h.html#a4355d16fcf9f644c9ac84293f0b1801f">int16</a></div><div class="ttdeci">short int16</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00026">Segmentacija_slike.h:26</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a43d43196463bde49cb067f5c20ab8481"><div class="ttname"><a href="_segmentacija__slike_8h.html#a43d43196463bde49cb067f5c20ab8481">int32</a></div><div class="ttdeci">signed int int32</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00025">Segmentacija_slike.h:25</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a7efa5e9c7494c7d4586359300221aa5d"><div class="ttname"><a href="_segmentacija__slike_8h.html#a7efa5e9c7494c7d4586359300221aa5d">filename</a></div><div class="ttdeci">const char * filename</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8c_source.html#l00025">Segmentacija_slike.c:25</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_a9ddae86018522bf2d708066884d89b3c"><div class="ttname"><a href="_segmentacija__slike_8h.html#a9ddae86018522bf2d708066884d89b3c">width</a></div><div class="ttdeci">uint32 width</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00043">Segmentacija_slike.h:43</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_aa3cfd87cc664fccbb898f0406654c528"><div class="ttname"><a href="_segmentacija__slike_8h.html#aa3cfd87cc664fccbb898f0406654c528">edged_pix_array</a></div><div class="ttdeci">byte * edged_pix_array</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00042">Segmentacija_slike.h:42</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_ad6796376ef5cc027ed35c4b2dd170f41"><div class="ttname"><a href="_segmentacija__slike_8h.html#ad6796376ef5cc027ed35c4b2dd170f41">height</a></div><div class="ttdeci">uint32 height</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00044">Segmentacija_slike.h:44</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_ae4be7110f537193162323b8caf132a7c"><div class="ttname"><a href="_segmentacija__slike_8h.html#ae4be7110f537193162323b8caf132a7c">pixels</a></div><div class="ttdeci">byte * pixels</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00040">Segmentacija_slike.h:40</a></div></div>
+<div class="ttc" id="a_segmentacija__slike_8h_html_aed8d116285a438e0f68b7fe0cbf64275"><div class="ttname"><a href="_segmentacija__slike_8h.html#aed8d116285a438e0f68b7fe0cbf64275">index_pixels_3b</a></div><div class="ttdeci">int index_pixels_3b</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00034">Segmentacija_slike.h:34</a></div></div>
+<div class="ttc" id="astructrgb_html"><div class="ttname"><a href="structrgb.html">rgb</a></div><div class="ttdoc">Used for keeping colormap.</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00126">Segmentacija_slike.h:126</a></div></div>
+<div class="ttc" id="astructrgb_html_a49c039bfb177536251e7fadaba4d4d11"><div class="ttname"><a href="structrgb.html#a49c039bfb177536251e7fadaba4d4d11">rgb::b</a></div><div class="ttdeci">byte b</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00127">Segmentacija_slike.h:127</a></div></div>
+<div class="ttc" id="astructrgb_html_a7f1378458a998351174a5e6201791909"><div class="ttname"><a href="structrgb.html#a7f1378458a998351174a5e6201791909">rgb::g</a></div><div class="ttdeci">byte g</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00127">Segmentacija_slike.h:127</a></div></div>
+<div class="ttc" id="astructrgb_html_ab60b5a519091320a0230516015baa5a8"><div class="ttname"><a href="structrgb.html#ab60b5a519091320a0230516015baa5a8">rgb::r</a></div><div class="ttdeci">byte r</div><div class="ttdef"><b>Definition:</b> <a href="_segmentacija__slike_8h_source.html#l00127">Segmentacija_slike.h:127</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

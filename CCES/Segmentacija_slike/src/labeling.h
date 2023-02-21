@@ -8,6 +8,7 @@
 #ifndef LABELING_H_
 #define LABELING_H_
 
+#define EDGE_VAL                0
 /**
  * @brief Labeling image using Conected Component algorithm
  *

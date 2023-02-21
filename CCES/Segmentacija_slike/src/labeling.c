@@ -7,6 +7,7 @@
 
 #include "Segmentacija_slike.h"
 #include "labeling.h"
+#include "normalization.h"
 
 #ifdef LABELING_V1
 /**
@@ -28,11 +29,6 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 		else
 			edge_im[i] = 1;
 	}
-	/*
-	 Maybe is better to make new matrix with values of edges UINT_MAX
-	 With this it will be possible to remove EDGE_VAL in if statement
-	 WAITING FOR NEXT ITERATION!!!!!!!
-	 */
 	byte (*mat_val)[w] = (byte(*)[w])edge_im;
 	uint32 *parent = (uint32 *) heap_malloc(0, w * h * sizeof(uint32));
 	if (parent == NULL) {
@@ -88,6 +84,7 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 	}
 	int i = 0;
 	int j = 0;
+	/* FIND PARENT*/
 	for(i = 0; i < label_counter; i++)
 	{
 		j = i;
@@ -96,6 +93,7 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 		}
 		parent[i] = j;
 	}
+	/*ASSIGN PIXELS IT ROOT VALUE*/
 	for(i = 0; i< h; i++)
 	{
 		for(j = 0; j < w; j++)
@@ -103,6 +101,7 @@ void labeling(byte * edge_im, uint32 w,uint32 h)
 			mat_val[i][j] = parent[mat_val[i][j]];
 		}
 	}
+	/*NORMALIZATION 0 TO 255*/
 	min_max_normalization(edge_im, w, h);
 
 	heap_free(0,parent);
@@ -227,7 +226,7 @@ void labeling(byte * restrict edge_im, uint32 w, uint32 h)
 	{
 		parent_arr[i] = i;
 	}
-	uint32 label_counter = w*h;
+	uint32 label_counter = w*h;//max number of labels is its number of pixels
 	uint32 max_neighbour;
 
 

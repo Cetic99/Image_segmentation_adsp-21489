@@ -8,6 +8,7 @@
 #include "Segmentacija_slike.h"
 #include "sobel_edge_detection.h"
 #include "normalization.h"
+#include "convolution.h"
 
 
 #ifdef EDGE

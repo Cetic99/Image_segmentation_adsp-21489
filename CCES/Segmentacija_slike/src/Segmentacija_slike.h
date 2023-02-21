@@ -17,106 +17,67 @@
 #include <SYSREG.h>
 #include <21489.h>
 
-#define EDGE_VAL                0
-#define NUM_LABELS              50000
 
-//---------------------TYPES DEFINITION-------------------
+
+/*---------------------TYPES DEFINITION-------------------*/
 typedef unsigned int uint32;
 typedef signed int int32;
-typedef short int16;
-typedef unsigned char byte;
-//========================================================
+typedef int int16;
+typedef unsigned int byte;
+/*========================================================*/
 
-//-----------------MEMORY MAPPING SECTIONS----------------
+/*-----------------MEMORY MAPPING SECTIONS----------------*/
 extern const uint32 uid;
 #pragma section("pixels_3b")
-static byte pixels_3b[45001];
-int index_pixels_3b;
+extern byte pixels_3b[45001];
+extern int index_pixels_3b;
 
-//========================================================
-
-
-//-------------------VARIABLE DECLARATION-----------------
-byte *pixels;
-byte *gray_pix_arr;
-byte *edged_pix_array;
-uint32 width;
-uint32 height;
-uint32 bytesPerPixel;
-//========================================================
+/*========================================================*/
 
 
-//#define READ_1 ||KNOWN_IMAGE_SIZE_READ
-//#define WRITE_1
-//#define GRAY_1
-//#define CONVOLUTION_NO_OPT || CONVOLUTION_UNROLL || CONVOLUTION_PRAGMA || CONVOLUTION_UNROLL_INLINE || CONVOLUTION_PRAGMA_INLINE
-//#define NORMALIZATION_NO_OPT || NORMALIZATION_HARDWARE || KNOWN_IMAGE_SIZE_NORMALIZATION
-//#define EDGE || KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
-//#define LABELING_V1 || LABELING_V2 || LABELING_V2_EXPECTED || KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
+/*-------------------VARIABLE DECLARATION-----------------*/
+extern byte *pixels;
+extern byte *gray_pix_arr;
+extern byte *edged_pix_array;
+extern uint32 width;
+extern uint32 height;
+extern uint32 bytesPerPixel;
+/*========================================================*/
 
-//-----------------------COMPILING------------------------
+/*========================================================*/
+
+/*--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------*/
+#define H 100
+#define W 100
+/*========================================================*/
+
+/*-----------------------COMPILING------------------------*/
 extern const char * filename;
-//NO OPTIMIZATION
+
+/*
+#define READ_1 ||KNOWN_IMAGE_SIZE_READ
+#define WRITE_1
+#define GRAY_1
+#define CONVOLUTION_NO_OPT || CONVOLUTION_UNROLL || CONVOLUTION_PRAGMA || CONVOLUTION_PRAGMA_INLINE
+#define NORMALIZATION_NO_OPT || NORMALIZATION_HARDWARE || KNOWN_IMAGE_SIZE_NORMALIZATION
+#define EDGE || KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
+#define LABELING_V1 || LABELING_V2 || LABELING_V2_EXPECTED || KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
+*/
+
+
+
+/*NO OPTIMIZATION*/
 #define READ_1
 #define WRITE_1
 #define GRAY_1
-#define CONVOLUTION_PRAGMA_INLINE
-#define NORMALIZATION_HARDWARE
+#define CONVOLUTION_NO_OPT
+#define NORMALIZATION_NO_OPT
 #define EDGE
-#define LABELING_V2_EXPECTED
+#define LABELING_V1
 #define COLOR_IMAGE_NO_OPT
 
 
-// //OPTIMIZED LABELING FUNCTION
-// #define READ_1
-// #define WRITE_1
-// #define GRAY_1
-// #define CONVOLUTION_NO_OPT
-// #define NORMALIZATION_PRAGMA
-// #define EDGE_NO_OPT
-// #define LABELING_V2
-// #define COLOR_IMAGE_NO_OPT
 
-// //OPTIMIZED CONVOLUTION FUNCTION
-// #define READ_1
-// #define WRITE_1
-// #define GRAY_1
-// #define CONVOLUTION_UNROLL
-// #define NORMALIZATION_PRAGMA
-// #define EDGE_NO_OPT
-// #define LABELING_V2
-// #define COLOR_IMAGE_NO_OPT
-
-// //OPTIMIZED CONVOLUTION FUNCTION INLINE
-// #define READ_1
-// #define WRITE_1
-// #define GRAY_1
-// #define CONVOLUTION_UNROLL_INLINE
-// #define NORMALIZATION_PRAGMA
-// #define EDGE_NO_OPT
-// #define LABELING_V2
-// #define COLOR_IMAGE_NO_OPT
-
-
-//KNOWN IMAGE SIZE
-// #define KNOWN_IMAGE_SIZE_READ
-// #define GRAY_PIPELINE
-// #define CONVOLUTION_UNROLL_INLINE_PIPELINE
-// #define KNOWN_IMAGE_SIZE_EDGE_OPTIMIZED
-// #define KNOWN_IMAGE_SIZE_LABELING_OPTIMIZED
-// #define KNOWN_IMAGE_SIZE_NORMALIZATION
-// #define WRITE_1
-// #define COLOR_IMAGE_PIPELINE
-
-
-
-
-//========================================================
-
-//--------USED ONLY WHEN KNOW_IMAGE_SIZE IS DEFINED-------
-#define H 88
-#define W 95
-//========================================================
 
 #define SIZE 256
 /**

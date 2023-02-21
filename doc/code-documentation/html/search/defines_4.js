@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['edge_5fno_5fopt_0',['EDGE_NO_OPT',['../_segmentacija__slike_8c.html#a132d29a5e8d15d523dc3ec333c75e4f0',1,'Segmentacija_slike.c']]],
-  ['edge_5fval_1',['EDGE_VAL',['../_segmentacija__slike_8c.html#ae1f3b80657b0de6c597f3c4b188f4088',1,'Segmentacija_slike.c']]]
+  ['edge_0',['EDGE',['../_segmentacija__slike_8h.html#ac243bfa96aa2c28014159ff098bd2324',1,'Segmentacija_slike.h']]],
+  ['edge_5fval_1',['EDGE_VAL',['../read__write_8h.html#ae1f3b80657b0de6c597f3c4b188f4088',1,'EDGE_VAL():&#160;read_write.h'],['../_segmentacija__slike_8h.html#ae1f3b80657b0de6c597f3c4b188f4088',1,'EDGE_VAL():&#160;Segmentacija_slike.h']]]
 ];

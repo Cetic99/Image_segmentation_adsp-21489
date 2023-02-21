@@ -1,0 +1,77 @@
+\hypertarget{normalization_8c_source}{}\doxysection{normalization.\+c}
+\label{normalization_8c_source}\index{src/normalization.c@{src/normalization.c}}
+\mbox{\hyperlink{normalization_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00001}00001 \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00002}00002 \textcolor{comment}{ * normalization.c}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00003}00003 \textcolor{comment}{ *}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00004}00004 \textcolor{comment}{ *  Created on: 19.02.2020.}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00005}00005 \textcolor{comment}{ *      Author: nikol}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00006}00006 \textcolor{comment}{ */}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00008}00008 \textcolor{preprocessor}{\#include"{}\mbox{\hyperlink{_segmentacija__slike_8h}{Segmentacija\_slike.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00009}00009 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{normalization_8h}{normalization.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00012}00012 \textcolor{preprocessor}{\#ifdef NORMALIZATION\_NO\_OPT}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00020}00020 \textcolor{keywordtype}{void} \mbox{\hyperlink{normalization_8c_a938720122e3561eab04e9d8522242428}{min\_max\_normalization}}(\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} *\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00021}00021     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} min = INT\_MAX, max = 0, i;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00022}00022     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} length = \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}};}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00023}00023     \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00024}00024         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] < min) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00025}00025             min = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i];}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00026}00026         \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00027}00027         \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] > max) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00028}00028             max = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i];}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00029}00029         \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00030}00030     \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00031}00031     \textcolor{keywordtype}{double} sub = max -\/ min;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00032}00032     \textcolor{keywordtype}{double} ratio;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00033}00033     \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00034}00034         ratio = (double) (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] -\/ min) / sub;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00035}00035         \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] = ratio * 255;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00036}00036     \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00037}00037 \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00038}00038 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00040}00040 \textcolor{preprocessor}{\#ifdef NORMALIZATION\_HARDWARE}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00048}\mbox{\hyperlink{normalization_8c_a938720122e3561eab04e9d8522242428}{00048}} \textcolor{keywordtype}{void} \mbox{\hyperlink{normalization_8c_a938720122e3561eab04e9d8522242428}{min\_max\_normalization}}(\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} * restrict \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00049}00049     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} min\_v = INT\_MAX, max\_v = 0, i;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00050}00050     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} length = \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}};}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00051}00051     \textcolor{keywordtype}{int} value=0;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00052}00052     \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00053}00053         value = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i];}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00054}00054         max\_v = max(value,max\_v);   \textcolor{comment}{//hardware accelerated function}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00055}00055         min\_v = min(value,min\_v);   \textcolor{comment}{//hardware accelerated function}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00056}00056     \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00057}00057     \textcolor{keywordtype}{double} sub = max\_v -\/ min\_v;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00058}00058     \textcolor{keywordtype}{double} ratio;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00059}00059     \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00060}00060         ratio = (double) (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] -\/ min\_v) / sub;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00061}00061         \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] = ratio * 255;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00062}00062     \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00063}00063 \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00064}00064 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00065}00065 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00067}00067 \textcolor{preprocessor}{\#ifdef KNOWN\_IMAGE\_SIZE\_NORMALIZATION}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00075}00075 \textcolor{keywordtype}{void} \mbox{\hyperlink{normalization_8c_a938720122e3561eab04e9d8522242428}{min\_max\_normalization}}(\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} *\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00076}00076     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} min\_v = INT\_MAX, max\_v = 0, i;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00077}00077     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} length = \mbox{\hyperlink{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}{H}} * \mbox{\hyperlink{_segmentacija__slike_8h_a649b8f01fd6c0f47ff3cbddaeba63bfb}{W}};}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00078}00078     \textcolor{keywordtype}{int} value=0;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00079}00079         \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00080}00080             value = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i];}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00081}00081             max\_v = max(value,max\_v);   \textcolor{comment}{//hardware accelerated function}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00082}00082             min\_v = min(value,min\_v);   \textcolor{comment}{//hardware accelerated function}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00083}00083         \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00084}00084     \textcolor{keywordtype}{double} sub = max\_v -\/ min\_v;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00085}00085     \textcolor{keywordtype}{double} ratio;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00086}00086 \textcolor{preprocessor}{\#pragma vector\_for}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00087}00087     \textcolor{keywordflow}{for} (i = 0; i < length; i++) \{}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00088}00088         ratio = (double) (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] -\/ min\_v) / sub;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00089}00089         \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[i] = ratio * 255;}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00090}00090     \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00091}00091 \}}
+\DoxyCodeLine{\Hypertarget{normalization_8c_source_l00092}00092 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

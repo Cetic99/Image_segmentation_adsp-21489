@@ -48,6 +48,7 @@
 								<option id="sharc.compiler.option.loopsimd.328129561" name="Allow automatic SIMD code generation in loops, aggregate assignments and inlined memcpy operations (-loop-simd)" superClass="sharc.compiler.option.loopsimd" value="true" valueType="boolean"/>
 								<option id="compiler.option.codesize.1983120240" name="Optimize for code size/speed (0 - smallest, 100 - fastest) (-Ov)" superClass="compiler.option.codesize" value="100" valueType="string"/>
 								<option id="compiler.option.compilerprofiling.824816634" name="Enable compiler instrumented profiling (-p)" superClass="compiler.option.compilerprofiling" value="false" valueType="boolean"/>
+								<option id="compiler.option.misraconformchk.378747303" name="Enable MISRA-C conformance checking (-misra)" superClass="compiler.option.misraconformchk" value="false" valueType="boolean"/>
 								<inputType id="compiler.inputType.1983004914" name="C/C++ Source" superClass="compiler.inputType"/>
 							</tool>
 							<tool id="sharc.toolchain.linker.167608421" name="CrossCore SHARC Linker" superClass="sharc.toolchain.linker">
@@ -65,6 +66,7 @@
 									<listOptionValue builtIn="false" value="&quot;${OutDir}/system/startup_ldf&quot;"/>
 								</option>
 								<option id="linker.option.misrachecksrcfiles.1542017862" name="-misra-no-cross-module" superClass="linker.option.misrachecksrcfiles" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<option id="linker.option.misraconformchk.1075052311" name="-misra" superClass="linker.option.misraconformchk" value="false" valueType="boolean"/>
 								<inputType id="linker.doj.input.2080478129" name="Object Files" superClass="linker.doj.input"/>
 							</tool>
 							<tool id="sharc.toolchain.archiver.764888928" name="CrossCore SHARC Archiver" superClass="sharc.toolchain.archiver">

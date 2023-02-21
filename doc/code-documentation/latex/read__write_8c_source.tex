@@ -1,0 +1,398 @@
+\hypertarget{read__write_8c_source}{}\doxysection{read\+\_\+write.\+c}
+\label{read__write_8c_source}\index{src/read\_write.c@{src/read\_write.c}}
+\mbox{\hyperlink{read__write_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00001}00001 \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00002}00002 \textcolor{comment}{ * read\_write.c}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00003}00003 \textcolor{comment}{ *}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00004}00004 \textcolor{comment}{ *  Created on: 19.02.2023.}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00005}00005 \textcolor{comment}{ *      Author: nikol}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00006}00006 \textcolor{comment}{ */}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00007}00007 \textcolor{preprocessor}{\#include"{}\mbox{\hyperlink{_segmentacija__slike_8h}{Segmentacija\_slike.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00008}00008 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{read__write_8h}{read\_write.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00010}00010 \textcolor{preprocessor}{\#ifdef READ\_1}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00011}\mbox{\hyperlink{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}{00011}} \textcolor{keywordtype}{void} \mbox{\hyperlink{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}{ReadImage}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *fileName) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00012}00012     FILE *imageFile = fopen(fileName, \textcolor{stringliteral}{"{}r"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00013}00013     \textcolor{keywordflow}{if} (imageFile == NULL) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00014}00014         printf(\textcolor{stringliteral}{"{}Nije otvorena slika\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00015}00015         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00016}00016     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00017}00017     \textcolor{keywordtype}{char} temp[4];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00018}00018     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} dataOffset;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00019}00019     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a068a04c3357658a71c8cbd68de38a1d0}{DATA\_OFFSET\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00020}00020     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00021}00021     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00022}00022     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00023}00023     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00024}00024     dataOffset = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00025}00025     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00026}00026     dataOffset |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00027}00027     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00028}00028     dataOffset |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00029}00029     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00030}00030     dataOffset |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00031}00031     printf(\textcolor{stringliteral}{"{}DataOffset: \%d\(\backslash\)n"{}}, dataOffset);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00032}00032 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00033}00033     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a6a6dbe125418de8a9f11943d009ef9ae}{WIDTH\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00034}00034 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00035}00035     \textcolor{comment}{//fread(\&width, 4, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00036}00036     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00037}00037     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00038}00038     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00039}00039     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00040}00040     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00041}00041     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00042}00042     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00043}00043     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00044}00044     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00045}00045     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00046}00046     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00047}00047 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00048}00048     printf(\textcolor{stringliteral}{"{}Width: \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00049}00049     fseek(imageFile, \mbox{\hyperlink{read__write_8h_abeaed8ebfced11028a9e1e4521a7a1bd}{HEIGHT\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00050}00050     \textcolor{comment}{//fread(\&height, 4, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00051}00051 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00052}00052     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00053}00053     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00054}00054     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00055}00055     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00056}00056     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00057}00057     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00058}00058     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00059}00059     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00060}00060     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00061}00061     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00062}00062     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00063}00063     printf(\textcolor{stringliteral}{"{}Height: \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00064}00064     \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}} bitsPerPixel;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00065}00065     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a3f6e89debd1c384b4592a0df898dff56}{BITS\_PER\_PIXEL\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00066}00066     \textcolor{comment}{//fread(\&bitsPerPixel, 2, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00068}00068     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00069}00069     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00070}00070     bitsPerPixel = temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00071}00071     bitsPerPixel <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00072}00072     bitsPerPixel |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00073}00073     printf(\textcolor{stringliteral}{"{}BitsPerPixel: \%d\(\backslash\)n"{}}, bitsPerPixel);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00074}00074     \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} = ((\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}}) bitsPerPixel) / 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00075}00075     printf(\textcolor{stringliteral}{"{}BytesPerPixel \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00076}00076 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00077}00077     \textcolor{keywordtype}{int} paddedRowSize = (int) (4 * ceil((\textcolor{keywordtype}{float}) (\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}) / 4.0f))}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00078}00078             * (\mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00079}00079     \textcolor{keywordtype}{int} unpaddedRowSize = (\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}) * (\mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00080}00080     \textcolor{keywordtype}{int} totalSize = unpaddedRowSize * (\mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00082}00082     \mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}} = heap\_install(pixels\_3b, \textcolor{keyword}{sizeof}(pixels\_3b), \mbox{\hyperlink{_segmentacija__slike_8c_a08e11421df4624386835415a364bae91}{uid}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00083}00083     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}} < 0) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00084}00084         printf(\textcolor{stringliteral}{"{}Instalacija heap-\/a nije prosla\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00085}00085         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00086}00086     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00087}00087     \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} = (\textcolor{keywordtype}{byte} *) heap\_malloc(\mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}}, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00088}00088     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} == NULL) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00089}00089         printf(\textcolor{stringliteral}{"{}Nije instancirana memorija\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00090}00090         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00091}00091     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00092}00092     \textcolor{keywordtype}{int} i = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00093}00093     \textcolor{keywordtype}{byte} *currentRowPointer = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} + ((\mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} -\/ 1) * unpaddedRowSize);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00094}00094     \textcolor{keywordflow}{for} (i = 0; i < \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00095}00095         fseek(imageFile, dataOffset + (i * paddedRowSize), SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00096}00096         fread(currentRowPointer, 1, unpaddedRowSize, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00097}00097         currentRowPointer -\/= unpaddedRowSize;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00098}00098     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00100}00100     fclose(imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00101}00101     \textcolor{comment}{// printf("{}Slika ucitana!\(\backslash\)n"{});}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00102}00102 \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00103}00103 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00104}00104 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00105}00105 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00106}00106 \textcolor{preprocessor}{\#ifdef WRITE\_1}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00114}\mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{00114}} \textcolor{keywordtype}{void} \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{WriteImage}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *fileName, \textcolor{keywordtype}{byte}* \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{read__write_8h_a90fd1f670200ebdbdc1cc4a119993ef0}{type}} t) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00115}00115     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00116}00116     \textcolor{keywordflow}{if} (t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}} || t== \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a7dbe5ec7ff7b98b9d96ad82268fd85e9}{CODED}})}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00117}00117         \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} = 1;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00118}00118     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00119}00119         \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} = 3;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00120}00120     FILE *outputFile = fopen(fileName, \textcolor{stringliteral}{"{}w"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00121}00121     \textcolor{keywordflow}{if} (!outputFile) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00122}00122         printf(\textcolor{stringliteral}{"{}fopen was not successful\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00123}00123         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00124}00124     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00125}00125     \textcolor{comment}{//*****HEADER************//}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00126}00126     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *BM = \textcolor{stringliteral}{"{}BM"{}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00127}00127     fwrite(\&BM[0], 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00128}00128     fwrite(\&BM[1], 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00129}00129     \textcolor{keywordtype}{int} paddedRowSize = (int) (4 * ceil((\textcolor{keywordtype}{float}) \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} / 4.0f)) * \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00130}00130 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00131}00131     \textcolor{comment}{// Because ADSP-\/21489 is not byte addresable, it is needed to shift data and write it}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00132}00132     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} fileSize = paddedRowSize * \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} + \mbox{\hyperlink{read__write_8h_a49999be01380f41cc0d0f1f1406fb277}{HEADER\_SIZE}} + \mbox{\hyperlink{read__write_8h_a021879045d7ce866f25971a7fa70497e}{INFO\_HEADER\_SIZE}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00133}00133     printf(\textcolor{stringliteral}{"{}fileSize: \%d\(\backslash\)n"{}}, fileSize);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00134}00134     fwrite(\&fileSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00135}00135     fileSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00136}00136     fwrite(\&fileSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00137}00137     fileSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00138}00138     fwrite(\&fileSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00139}00139     fileSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00140}00140     fwrite(\&fileSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00142}00142     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} reserved = 0x0000;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00143}00143     fwrite(\&reserved, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00144}00144     fwrite(\&reserved, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00145}00145     fwrite(\&reserved, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00146}00146     fwrite(\&reserved, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00147}00147 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00148}00148     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} dataOffset = \mbox{\hyperlink{read__write_8h_a49999be01380f41cc0d0f1f1406fb277}{HEADER\_SIZE}} + \mbox{\hyperlink{read__write_8h_a021879045d7ce866f25971a7fa70497e}{INFO\_HEADER\_SIZE}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00149}00149     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} dataOffset2 = dataOffset;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00150}00150     \textcolor{keywordflow}{if} (t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}} || t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a7dbe5ec7ff7b98b9d96ad82268fd85e9}{CODED}}) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00151}00151         dataOffset += 4 * 256;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00152}00152     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00153}00153     fwrite(\&dataOffset, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00154}00154     dataOffset >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00155}00155     fwrite(\&dataOffset, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00156}00156     dataOffset >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00157}00157     fwrite(\&dataOffset, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00158}00158     dataOffset >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00159}00159     fwrite(\&dataOffset, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00160}00160 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00161}00161     \textcolor{comment}{//*******INFO*HEADER******//}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00162}00162     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} infoHeaderSize = \mbox{\hyperlink{read__write_8h_a021879045d7ce866f25971a7fa70497e}{INFO\_HEADER\_SIZE}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00163}00163     fwrite(\&infoHeaderSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00164}00164     infoHeaderSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00165}00165     fwrite(\&infoHeaderSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00166}00166     infoHeaderSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00167}00167     fwrite(\&infoHeaderSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00168}00168     infoHeaderSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00169}00169     fwrite(\&infoHeaderSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00170}00170 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00171}00171     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} width2 = \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00172}00172     fwrite(\&width2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00173}00173     width2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00174}00174     fwrite(\&width2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00175}00175     width2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00176}00176     fwrite(\&width2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00177}00177     width2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00178}00178     fwrite(\&width2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00179}00179 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00180}00180     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} height2 = \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00181}00181     fwrite(\&height2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00182}00182     height2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00183}00183     fwrite(\&height2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00184}00184     height2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00185}00185     fwrite(\&height2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00186}00186     height2 >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00187}00187     fwrite(\&height2, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00188}00188 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00189}00189     \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}} planes = 1; \textcolor{comment}{// always 1}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00190}00190     fwrite(\&planes, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00191}00191     planes >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00192}00192     fwrite(\&planes, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00193}00193 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00194}00194     \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}} bitsPerPixel = \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} * 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00195}00195     fwrite(\&bitsPerPixel, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00196}00196     bitsPerPixel >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00197}00197     fwrite(\&bitsPerPixel, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00198}00198 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00199}00199     \textcolor{comment}{// write compression}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00200}00200     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} compression = \mbox{\hyperlink{read__write_8h_ae007f7efcb649937cd1ef4e3f4e8e94e}{NO\_COMPRESION}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00201}00201     fwrite(\&compression, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00202}00202     compression >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00203}00203     fwrite(\&compression, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00204}00204     compression >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00205}00205     fwrite(\&compression, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00206}00206     compression >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00207}00207     fwrite(\&compression, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00208}00208 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00209}00209     \textcolor{comment}{// write image size (in bytes)}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00210}00210     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} imageSize;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00211}00211     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} resolutionX;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00212}00212     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} resolutionY;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00213}00213     \textcolor{keywordflow}{if} (t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}} || t== \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a7dbe5ec7ff7b98b9d96ad82268fd85e9}{CODED}}) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00214}00214         imageSize = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00215}00215         resolutionX = 0; \textcolor{comment}{// 11811; //300 dpi}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00216}00216         resolutionY = 0; \textcolor{comment}{// 11811; //300 dpi}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00217}00217     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23ae974cc61fabbd2a1578f1f6579ecb544}{COLORED}}) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00218}00218         imageSize = \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} * \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} * \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00219}00219         resolutionX = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00220}00220         resolutionY = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00221}00221     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00222}00222     fwrite(\&imageSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00223}00223     imageSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00224}00224     fwrite(\&imageSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00225}00225     imageSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00226}00226     fwrite(\&imageSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00227}00227     imageSize >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00228}00228     fwrite(\&imageSize, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00229}00229 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00230}00230     fwrite(\&resolutionX, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00231}00231     resolutionX >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00232}00232     fwrite(\&resolutionX, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00233}00233     resolutionX >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00234}00234     fwrite(\&resolutionX, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00235}00235     resolutionX >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00236}00236     fwrite(\&resolutionX, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00237}00237 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00238}00238     fwrite(\&resolutionY, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00239}00239     resolutionY >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00240}00240     fwrite(\&resolutionY, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00241}00241     resolutionY >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00242}00242     fwrite(\&resolutionY, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00243}00243     resolutionY >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00244}00244     fwrite(\&resolutionY, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00245}00245 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00246}00246     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} colorsUsed = \mbox{\hyperlink{read__write_8h_a9d3c0470019a469654351bbf889024ca}{MAX\_NUMBER\_OF\_COLORS}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00247}00247     fwrite(\&colorsUsed, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00248}00248     colorsUsed >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00249}00249     fwrite(\&colorsUsed, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00250}00250     colorsUsed >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00251}00251     fwrite(\&colorsUsed, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00252}00252     colorsUsed >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00253}00253     fwrite(\&colorsUsed, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00254}00254 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00255}00255     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} importantColors = \mbox{\hyperlink{read__write_8h_acc41e09c63aae7f85191a7fe0e656f1b}{ALL\_COLORS\_REQUIRED}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00256}00256     fwrite(\&importantColors, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00257}00257     importantColors >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00258}00258     fwrite(\&importantColors, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00259}00259     importantColors >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00260}00260     fwrite(\&importantColors, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00261}00261     importantColors >>= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00262}00262     fwrite(\&importantColors, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00263}00263 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00264}00264     \textcolor{keywordtype}{int} unpaddedRowSize = \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} * \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00265}00265     \textcolor{keywordflow}{if} (t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a3fb6c4ad00f4ad98553e01229d1803ac}{GRAY}}) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00266}00266         \textcolor{keywordtype}{int} zero = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00267}00267         \textcolor{keywordtype}{int} counter = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00268}00268         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} i = 0; i < 256; i++) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00269}00269             \textcolor{keywordflow}{if}(counter != 10)\{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00270}00270                 fwrite(\&counter, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00271}00271                 fwrite(\&counter, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00272}00272                 fwrite(\&counter, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00273}00273             \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00274}00274             \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00275}00275                 \textcolor{keywordtype}{int} random = 9;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00276}00276                 fwrite(\&random, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00277}00277                 fwrite(\&random, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00278}00278                 fwrite(\&random, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00279}00279             \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00280}00280             fwrite(\&zero, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00281}00281             counter = counter + 1;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00282}00282         \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00283}00283     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00284}00284     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (t == \mbox{\hyperlink{read__write_8h_a78793674f4bd3251ef81b371548fdf23a7dbe5ec7ff7b98b9d96ad82268fd85e9}{CODED}}) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00285}00285         \textcolor{keywordtype}{int} zero = 0;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00286}00286         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} i = 0; i < 256; i++) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00287}00287             fwrite(\&\mbox{\hyperlink{read__write_8h_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].b, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00288}00288             fwrite(\&\mbox{\hyperlink{read__write_8h_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].g, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00289}00289             fwrite(\&\mbox{\hyperlink{read__write_8h_ae70c19442652fcd0849b8c426b96c594}{colormap}}[i].r, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00290}00290             fwrite(\&zero, 1, 1, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00291}00291         \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00292}00292     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00293}00293 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00294}00294     \textcolor{keywordtype}{int} pixelOffset;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00295}00295     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00296}00296         \textcolor{comment}{// printf("{}Upis reda\(\backslash\)n"{});}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00297}00297         pixelOffset = ((\mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} -\/ i) -\/ 1) * unpaddedRowSize;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00298}00298         fwrite(\&\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}[pixelOffset], 1, paddedRowSize, outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00299}00299     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00300}00300     fclose(outputFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00301}00301     \textcolor{comment}{// printf("{}Slika sacuvana!\(\backslash\)n"{});}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00302}00302 \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00303}00303 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00304}00304 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00305}00305 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00306}00306 \textcolor{preprocessor}{\#ifdef KNOWN\_IMAGE\_SIZE\_READ}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00313}00313 \textcolor{keywordtype}{void} \mbox{\hyperlink{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}{ReadImage}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char} *fileName) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00314}00314     FILE *imageFile = fopen(fileName, \textcolor{stringliteral}{"{}r"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00315}00315     \textcolor{keywordflow}{if} (imageFile == NULL) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00316}00316         printf(\textcolor{stringliteral}{"{}Nije otvorena slika\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00317}00317         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00318}00318     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00319}00319     \textcolor{keywordtype}{char} temp[4];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00320}00320     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} dataOffset;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00321}00321     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a068a04c3357658a71c8cbd68de38a1d0}{DATA\_OFFSET\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00322}00322     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00323}00323     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00324}00324     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00325}00325     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00326}00326     dataOffset = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00327}00327     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00328}00328     dataOffset |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00329}00329     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00330}00330     dataOffset |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00331}00331     dataOffset <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00332}00332     dataOffset |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00333}00333     printf(\textcolor{stringliteral}{"{}DataOffset: \%d\(\backslash\)n"{}}, dataOffset);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00334}00334 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00335}00335     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a6a6dbe125418de8a9f11943d009ef9ae}{WIDTH\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00336}00336 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00337}00337     \textcolor{comment}{//fread(\&width, 4, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00338}00338     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00339}00339     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00340}00340     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00341}00341     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00342}00342     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00343}00343     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00344}00344     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00345}00345     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00346}00346     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00347}00347     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00348}00348     \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}} |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00349}00349 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00350}00350     printf(\textcolor{stringliteral}{"{}Width: \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00351}00351     fseek(imageFile, \mbox{\hyperlink{read__write_8h_abeaed8ebfced11028a9e1e4521a7a1bd}{HEIGHT\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00352}00352     \textcolor{comment}{//fread(\&height, 4, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00353}00353 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00354}00354     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00355}00355     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00356}00356     fread(temp + 2, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00357}00357     fread(temp + 3, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00358}00358     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} = temp[3];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00359}00359     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00360}00360     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[2];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00361}00361     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00362}00362     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00363}00363     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00364}00364     \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}} |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00365}00365     printf(\textcolor{stringliteral}{"{}Height: \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00366}00366     \mbox{\hyperlink{_segmentacija__slike_8h_a4355d16fcf9f644c9ac84293f0b1801f}{int16}} bitsPerPixel;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00367}00367     fseek(imageFile, \mbox{\hyperlink{read__write_8h_a3f6e89debd1c384b4592a0df898dff56}{BITS\_PER\_PIXEL\_OFFSET}}, SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00368}00368     \textcolor{comment}{//fread(\&bitsPerPixel, 2, 1, imageFile);}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00369}00369 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00370}00370     fread(temp, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00371}00371     fread(temp + 1, 1, 1, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00372}00372     bitsPerPixel = temp[1];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00373}00373     bitsPerPixel <<= 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00374}00374     bitsPerPixel |= temp[0];}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00375}00375     printf(\textcolor{stringliteral}{"{}BitsPerPixel: \%d\(\backslash\)n"{}}, bitsPerPixel);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00376}00376     \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}} = ((\mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}}) bitsPerPixel) / 8;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00377}00377     printf(\textcolor{stringliteral}{"{}BytesPerPixel \%d\(\backslash\)n"{}}, \mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00378}00378 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00379}00379     \textcolor{keywordtype}{int} paddedRowSize = (int) (4 * ceil((\textcolor{keywordtype}{float}) (\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}) / 4.0f))}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00380}00380             * (\mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00381}00381     \textcolor{keywordtype}{int} unpaddedRowSize = (\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}) * (\mbox{\hyperlink{_segmentacija__slike_8h_a180b9d9e87ce370141d8c112fe62895d}{bytesPerPixel}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00382}00382     \textcolor{keywordtype}{int} totalSize = unpaddedRowSize * (\mbox{\hyperlink{_segmentacija__slike_8h_ad6796376ef5cc027ed35c4b2dd170f41}{height}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00383}00383 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00384}00384     \mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}} = heap\_install(pixels\_3b, \textcolor{keyword}{sizeof}(pixels\_3b), \mbox{\hyperlink{_segmentacija__slike_8c_a08e11421df4624386835415a364bae91}{uid}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00385}00385     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}} < 0) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00386}00386         printf(\textcolor{stringliteral}{"{}Instalacija heap-\/a nije prosla\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00387}00387         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00388}00388     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00389}00389     \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} = (\textcolor{keywordtype}{byte} *) heap\_malloc(\mbox{\hyperlink{_segmentacija__slike_8h_aed8d116285a438e0f68b7fe0cbf64275}{index\_pixels\_3b}}, \mbox{\hyperlink{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}{H}} * \mbox{\hyperlink{_segmentacija__slike_8h_a649b8f01fd6c0f47ff3cbddaeba63bfb}{W}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00390}00390     \textcolor{keywordflow}{if} (\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} == NULL) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00391}00391         printf(\textcolor{stringliteral}{"{}Nije instancirana memorija\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00392}00392         \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00393}00393     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00394}00394 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00395}00395     \textcolor{keywordtype}{byte} *currentRowPointer = \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}} + ((\mbox{\hyperlink{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}{H}} -\/ 1) * unpaddedRowSize);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00396}00396     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{_segmentacija__slike_8h_abec92cc72a096640b821b8cd56a02495}{H}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00397}00397         fseek(imageFile, dataOffset + (i * paddedRowSize), SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00398}00398         fread(currentRowPointer, 1, unpaddedRowSize, imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00399}00399         currentRowPointer -\/= unpaddedRowSize;}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00400}00400     \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00401}00401 }
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00402}00402     fclose(imageFile);}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00403}00403     \textcolor{comment}{// printf("{}Slika ucitana!\(\backslash\)n"{});}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00404}00404 \}}
+\DoxyCodeLine{\Hypertarget{read__write_8c_source_l00405}00405 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

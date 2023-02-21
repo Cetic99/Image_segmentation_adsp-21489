@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['labeling_5fv1_0',['LABELING_V1',['../_segmentacija__slike_8c.html#abf0d11509c8702d21f371cc6ca17a61b',1,'Segmentacija_slike.c']]]
+  ['labeling_5fv2_5fexpected_0',['LABELING_V2_EXPECTED',['../_segmentacija__slike_8h.html#a01d370d7566f4983c777821e883569df',1,'Segmentacija_slike.h']]]
 ];

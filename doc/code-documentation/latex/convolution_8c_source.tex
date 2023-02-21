@@ -1,0 +1,67 @@
+\hypertarget{convolution_8c_source}{}\doxysection{convolution.\+c}
+\label{convolution_8c_source}\index{src/convolution.c@{src/convolution.c}}
+\mbox{\hyperlink{convolution_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00001}00001 \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00002}00002 \textcolor{comment}{ * convolution.c}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00003}00003 \textcolor{comment}{ *}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00004}00004 \textcolor{comment}{ *  Created on: 19.02.2020.}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00005}00005 \textcolor{comment}{ *      Author: nikol}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00006}00006 \textcolor{comment}{ */}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00008}00008 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{_segmentacija__slike_8h}{Segmentacija\_slike.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00009}00009 \textcolor{preprocessor}{\#include"{}\mbox{\hyperlink{convolution_8h}{convolution.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00011}00011 \textcolor{preprocessor}{\#ifdef CONVOLUTION\_NO\_OPT}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00022}00022 \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} convolution(\textcolor{keywordtype}{byte} *\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}{int32}} kernel[3][3], \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} row, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} column, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}})}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00023}00023 \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00024}00024     \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}(*pix\_mat)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}] = (\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}(*)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}])\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}};}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00025}00025     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} i, j, sum = 0;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00026}00026     \textcolor{keywordflow}{for} (i = 0; i < 3; i++)}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00027}00027     \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00028}00028         \textcolor{keywordflow}{for} (j = 0; j < 3; j++)}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00029}00029         \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00030}00030             sum += kernel[i][j] * pix\_mat[i + row -\/ 1][j + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00031}00031         \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00032}00032     \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00033}00033     \textcolor{keywordflow}{return} sum;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00034}00034 \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00035}00035 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00036}00036 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00037}00037 \textcolor{preprocessor}{\#ifdef CONVOLUTION\_PRAGMA}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00048}00048 \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} convolution(\textcolor{keywordtype}{byte} *restrict \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}{int32}} kernel[3][3], \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} row, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} column, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}})}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00049}00049 \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00050}00050     \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}(*pix\_mat)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}] = (\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}}(*)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}])\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}};}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00051}00051     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} i, j, sum = 0;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00052}00052 \textcolor{preprocessor}{    \#pragma vector\_for}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00053}00053     \textcolor{keywordflow}{for} (i = 0; i < 3; i++)}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00054}00054     \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00055}00055         sum += kernel[i][0] * pix\_mat[i + row -\/ 1][column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00056}00056         sum += kernel[i][1] * pix\_mat[i + row -\/ 1][1 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00057}00057         sum += kernel[i][2] * pix\_mat[i + row -\/ 1][2 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00058}00058     \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00059}00059     \textcolor{keywordflow}{return} sum;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00060}00060 \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00061}00061 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00062}00062 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00063}00063 \textcolor{preprocessor}{\#ifdef CONVOLUTION\_UNROLL}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00074}00074 \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} convolution(\textcolor{keywordtype}{byte} * restrict \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{_segmentacija__slike_8h_a43d43196463bde49cb067f5c20ab8481}{int32}} kernel[3][3], \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} row,}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00075}00075         \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} column, \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} \mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}) \{}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00076}00076     \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} (*pix\_mat)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}] = (\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} (*)[\mbox{\hyperlink{_segmentacija__slike_8h_a9ddae86018522bf2d708066884d89b3c}{width}}]) \mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}};}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00077}00077     \mbox{\hyperlink{_segmentacija__slike_8h_a1134b580f8da4de94ca6b1de4d37975e}{uint32}} i, j, sum = 0;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00078}00078     sum += kernel[0][0] * pix\_mat[row -\/ 1][column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00079}00079     sum += kernel[0][1] * pix\_mat[row -\/ 1][1 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00080}00080     sum += kernel[0][2] * pix\_mat[row -\/ 1][2 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00082}00082     sum += kernel[1][0] * pix\_mat[1 + row -\/ 1][column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00083}00083     sum += kernel[1][1] * pix\_mat[1 + row -\/ 1][1 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00084}00084     sum += kernel[1][2] * pix\_mat[1 + row -\/ 1][2 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00085}00085 }
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00086}00086     sum += kernel[2][0] * pix\_mat[2 + row -\/ 1][column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00087}00087     sum += kernel[2][1] * pix\_mat[2 + row -\/ 1][1 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00088}00088     sum += kernel[2][2] * pix\_mat[2 + row -\/ 1][2 + column -\/ 1];}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00089}00089     \textcolor{keywordflow}{return} sum;}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00090}00090 \}}
+\DoxyCodeLine{\Hypertarget{convolution_8c_source_l00091}00091 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

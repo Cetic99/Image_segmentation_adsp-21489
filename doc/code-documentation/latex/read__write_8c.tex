@@ -1,0 +1,56 @@
+\hypertarget{read__write_8c}{}\doxysection{src/read\+\_\+write.c File Reference}
+\label{read__write_8c}\index{src/read\_write.c@{src/read\_write.c}}
+{\ttfamily \#include \char`\"{}Segmentacija\+\_\+slike.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}read\+\_\+write.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}{Read\+Image}} (const char $\ast$file\+Name)
+\begin{DoxyCompactList}\small\item\em Reading image from filesystem. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}{Write\+Image}} (const char $\ast$file\+Name, \mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$\mbox{\hyperlink{_segmentacija__slike_8h_ae4be7110f537193162323b8caf132a7c}{pixels}}, \mbox{\hyperlink{read__write_8h_a90fd1f670200ebdbdc1cc4a119993ef0}{type}} t)
+\begin{DoxyCompactList}\small\item\em Writing image to filesystem. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}\label{read__write_8c_a07620f95c0acb034a2da481ca32c6b5c}} 
+\index{read\_write.c@{read\_write.c}!ReadImage@{ReadImage}}
+\index{ReadImage@{ReadImage}!read\_write.c@{read\_write.c}}
+\doxysubsubsection{\texorpdfstring{ReadImage()}{ReadImage()}}
+{\footnotesize\ttfamily void Read\+Image (\begin{DoxyParamCaption}\item[{const char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Reading image from filesystem. 
+
+This function is used when image size is unknown at compile time 
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{read__write_8c_source_l00011}{11}} of file \mbox{\hyperlink{read__write_8c_source}{read\+\_\+write.\+c}}.
+
+\mbox{\Hypertarget{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}\label{read__write_8c_a5a055c6196ca8cd460f3dd1b8157d252}} 
+\index{read\_write.c@{read\_write.c}!WriteImage@{WriteImage}}
+\index{WriteImage@{WriteImage}!read\_write.c@{read\_write.c}}
+\doxysubsubsection{\texorpdfstring{WriteImage()}{WriteImage()}}
+{\footnotesize\ttfamily void Write\+Image (\begin{DoxyParamCaption}\item[{const char $\ast$}]{file\+Name,  }\item[{\mbox{\hyperlink{_segmentacija__slike_8h_a0c8186d9b9b7880309c27230bbb5e69d}{byte}} $\ast$}]{pixels,  }\item[{\mbox{\hyperlink{read__write_8h_a90fd1f670200ebdbdc1cc4a119993ef0}{type}}}]{t }\end{DoxyParamCaption})}
+
+
+
+Writing image to filesystem. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & Name of file \\
+\hline
+{\em pixels} & Array of bytes \\
+\hline
+{\em t} & Type of image, GRAY or COLORED \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{read__write_8c_source_l00114}{114}} of file \mbox{\hyperlink{read__write_8c_source}{read\+\_\+write.\+c}}.
+
