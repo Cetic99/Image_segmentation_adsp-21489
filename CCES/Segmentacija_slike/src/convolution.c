@@ -21,7 +21,7 @@
  */
 uint32 convolution(byte * restrict pixels, int32 kernel[3][3], uint32 row, uint32 column, uint32 width)
 {
-	byte(*pix_mat)[width] = (byte(*)[width])pixels;
+	byte(*pix_mat)[width] = (byte(*)[width])pixels;/* ovde javi gresku*/
 	uint32 i, j, sum = 0;
 	for (i = 0; i < 3; i++)
 	{

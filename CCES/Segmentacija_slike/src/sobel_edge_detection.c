@@ -33,7 +33,7 @@ void sobel_edge_detector(byte * restrict pixels, byte ** out_pixels, uint32 widt
 		return;
 	}
 	*out_pixels = out_arr;         // assigning array to output pointer
-	uint32 (*edged_pixels_mat_uint32)[width] =
+	uint32 (*restrict edged_pixels_mat_uint32)[width] =
 			(uint32 (*)[width]) out_arr; // converting array to matrix
 
 	int32 mx[3][3] = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
